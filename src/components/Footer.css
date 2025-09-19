@@ -1,0 +1,110 @@
+.footer {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  color: white;
+  padding: 1.5rem 0 1rem 0;
+  margin-top: 4rem;
+  border-radius: 20px 20px 0 0;
+  box-shadow: 0 -4px 20px rgba(231, 76, 60, 0.3);
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.footer-container {
+  width: 100%;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 3rem;
+  flex-wrap: wrap;
+}
+
+.footer-section {
+  text-align: center;
+  padding: 0.5rem;
+}
+
+.footer-section h3 {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: white;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.footer-section p {
+  font-size: 0.9rem;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+}
+
+.footer-section p.underline {
+  text-decoration: underline;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.footer-section p.underline:hover {
+  color: white;
+}
+
+/* Анимация при наведении на секции */
+.footer-section {
+  transition: transform 0.3s ease;
+}
+
+.footer-section:hover {
+  transform: translateY(-3px);
+}
+
+.footer-section h3 {
+  transition: color 0.3s ease;
+}
+
+.footer-section:hover h3 {
+  color: #f8f9fa;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .footer {
+    padding: 0.5rem 0 0.5rem 0;
+    border-radius: 10px 10px 0 0;
+  }
+  
+  .footer-container {
+    padding: 0;
+  }
+  
+  .footer-content {
+    gap: 1rem;
+  }
+  
+  .footer-section {
+    padding: 0.25rem;
+  }
+  
+  .footer-section h3 {
+    font-size: 1rem;
+  }
+  
+  .footer-section p {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer-content {
+    gap: 0.5rem;
+    flex-direction: column;
+  }
+} 
