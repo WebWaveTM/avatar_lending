@@ -115,6 +115,14 @@ button:focus-visible {
   transform: translateX(100px);
 }
 
+/* Улучшение качества иконок социальных сетей */
+.social-icon-high-quality {
+  width: 96px !important;
+  height: 96px !important;
+  image-rendering: -webkit-optimize-contrast;
+  -ms-interpolation-mode: nearest-neighbor;
+}
+
 @media (max-width: 768px) {
   .social-link {
     width: 90%;
@@ -132,5 +140,9 @@ button:focus-visible {
   }
   .social-link .step h3 {
     font-size: 1.6rem;
+  }
+  .social-icon-high-quality {
+    width: 80px !important;
+    height: 80px !important;
   }
 }

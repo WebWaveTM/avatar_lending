@@ -67,48 +67,30 @@ function App() {
             <button className="ruby-button demo-button" onClick={() => console.log('Демо-ролик')}>
               Посмотреть демо-ролик
             </button>
-            <h2 className="section-title-black">Наши соцсети</h2>
+            <h2 className="section-title-black">Как это работает</h2>
+            <p className="section-subtitle">3 простых шага к персонализированному обучению</p>
             <div className="how-it-works-flex">
+              <div className="steps-container">
+                <div className="step">
+                  <h3>Подключение</h3>
+                </div>
+                <div className="step">
+                  <h3>Настройка</h3>
+                  <p>Выберете аватара</p>
+                </div>
+                <div className="step">
+                  <h3>Использование</h3>
+                  <p>Аватар автоматически оживёт и будет повторять вашу мимику</p>
+                </div>
+              </div>
               <div className="how-it-works-image-wrapper">
                 <img 
                   src="/e4d435a6e5e35782fb9a86e609c04fe610e9d431.png" 
                   srcSet="/e4d435a6e5e35782fb9a86e609c04fe610e9d431.png 1x, /e4d435a6e5e35782fb9a86e609c04fe610e9d431.png 2x"
                   sizes="(max-width: 600px) 100vw, 600px"
-                  alt="Наши соцсети" 
+                  alt="Как это работает" 
                   className="how-it-works-image responsive-img"
                 />
-              </div>
-              <div className="steps-container">
-                <a
-                  href="https://t.me/avatarsintheschool"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="social-link"
-                >
-                  <div className="step">
-                    <h3>Telegram</h3>
-                    <img
-                      src="/Property 1=pink (1).png"
-                      alt="Telegram"
-                      className="responsive-img"
-                    />
-                  </div>
-                </a>
-                <a
-                  href="https://vk.com/school148nsk"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="social-link"
-                >
-                  <div className="step">
-                    <h3>ВКонтакте</h3>
-                    <img
-                      src="/Property 1=pink.png"
-                      alt="ВКонтакте"
-                      className="responsive-img"
-                    />
-                  </div>
-                </a>
               </div>
             </div>
           </section>
@@ -148,6 +130,53 @@ function App() {
                   srcSet="/0cfba77f13102428d4a2b2b4b36a369a1b6ee40c.png 1x, /0cfba77f13102428d4a2b2b4b36a369a1b6ee40c.png 2x"
                   sizes="(max-width: 600px) 100vw, 250px"
                 />
+              </div>
+            </div>
+          </section>
+
+          <section id="social-networks" className="section">
+            <h2 className="section-title-black">Наши соцсети</h2>
+            <div className="how-it-works-flex">
+              <div className="how-it-works-image-wrapper">
+                <img 
+                  src="/e4d435a6e5e35782fb9a86e609c04fe610e9d431.png" 
+                  srcSet="/e4d435a6e5e35782fb9a86e609c04fe610e9d431.png 1x, /e4d435a6e5e35782fb9a86e609c04fe610e9d431.png 2x"
+                  sizes="(max-width: 600px) 100vw, 600px"
+                  alt="Наши соцсети" 
+                  className="how-it-works-image responsive-img"
+                />
+              </div>
+              <div className="steps-container">
+                <a
+                  href="https://t.me/avatarsintheschool"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="social-link"
+                >
+                  <div className="step">
+                    <h3>Telegram</h3>
+                    <img
+                      src="/Property 1=pink (1).png"
+                      alt="Telegram"
+                      className="responsive-img social-icon-high-quality"
+                    />
+                  </div>
+                </a>
+                <a
+                  href="https://vk.com/school148nsk"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="social-link"
+                >
+                  <div className="step">
+                    <h3>ВКонтакте</h3>
+                    <img
+                      src="/Property 1=pink.png"
+                      alt="ВКонтакте"
+                      className="responsive-img social-icon-high-quality"
+                    />
+                  </div>
+                </a>
               </div>
             </div>
           </section>
