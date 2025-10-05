@@ -55,8 +55,8 @@
   text-align: center;
   padding: 4rem 0;
   background: rgba(255, 255, 255, 0.3);
-  backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
+  backdrop-filter: blur(15px);
   color: #2c3e50;
   border-radius: 12px;
   margin-bottom: 3rem;
@@ -293,7 +293,7 @@
   
   .step {
     padding: 1.8rem;
-    max-width: 450px;
+    max-width: 750px;
   }
   
   .step h3 {
@@ -469,8 +469,8 @@
 .how-it-works-flex {
   display: flex;
   flex-direction: row;
-  align-items: stretch;
-  gap: 2.5rem;
+  align-items: center;
+  gap: 1.25rem;
   margin-top: 2rem;
   justify-content: center;
   position: relative;
@@ -481,19 +481,19 @@
   flex-direction: column;
   align-items: center;
   gap: 2rem;
-  max-width: 500px;
-  min-width: 260px;
+  max-width: 1000px;
+  min-width: 320px;
   margin: 0 auto;
 }
 
 .how-it-works-image-wrapper {
   margin-left: 0px;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
 }
 
 .how-it-works-image {
-  margin-left: 200px;
+  margin-left: 0;
   height: 800px;
   max-height: 600px;
   width: auto;
@@ -506,7 +506,6 @@
   margin-top: 0;
   margin-bottom: 0;
   display: block;
-  align-self: flex-start;
 }
 
 @media (max-width: 900px) {
@@ -706,8 +705,8 @@
 
 .faq-item {
   background: rgba(255, 255, 255, 0.3);
-  backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
+  backdrop-filter: blur(15px);
   border-radius: 12px;
   box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
@@ -973,12 +972,12 @@
 
 .step {
   width: 100%;
-  max-width: 500px;
+  max-width: 800px;
   text-align: left;
   padding: 2rem;
   background: rgba(255, 255, 255, 0.3);
-  backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
+  backdrop-filter: blur(15px);
   border-radius: 12px;
   box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
@@ -1278,7 +1277,7 @@
   
   .step {
     padding: 2rem;
-    max-width: 480px;
+    max-width: 900px;
   }
   
   .step h3 {

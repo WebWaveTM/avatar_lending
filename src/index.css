@@ -11,6 +11,7 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
 }
 
@@ -76,3 +77,60 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 } 
+
+/* Делает карточки соцсетей полностью кликабельными без подчеркивания */
+.social-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  width: 100%;
+  max-width: 1260px;
+  margin: 0 auto;
+}
+
+/* Горизонтальное выравнивание заголовка и картинки в соцблоках */
+.social-link .step {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: nowrap;
+  height: 168px;
+  box-sizing: border-box;
+  padding-right: 200px;
+}
+
+.social-link .step h3 {
+  margin: 0;
+  font-size: 2rem;
+  line-height: 1.1;
+  flex: 1 1 auto;
+}
+
+.social-link .step img {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  margin-left: auto;
+  transform: translateX(100px);
+}
+
+@media (max-width: 768px) {
+  .social-link {
+    width: 90%;
+    max-width: 90vw;
+  }
+  .social-link .step {
+    height: 144px;
+    gap: 1.25rem;
+    padding-right: 200px;
+  }
+  .social-link .step img {
+    width: 64px;
+    height: 64px;
+    transform: translateX(100px);
+  }
+  .social-link .step h3 {
+    font-size: 1.6rem;
+  }
+}

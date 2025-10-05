@@ -7,10 +7,10 @@ function Footer() {
       <div className="footer-container">
         <div className="footer-content">
           <div className="footer-section">
-            <p>example@mail.ru</p>
+            <p>riana3@mail.ru</p>
           </div>
           <div className="footer-section">
-            <p>+ 7(999) 999-99-99</p>
+            <p>+79612259545</p>
           </div>
           <div className="footer-section">
             <p className="underline">Политика конфиденциальности</p>
@@ -18,7 +18,38 @@ function Footer() {
           <div className="footer-section">
             <p>Наши соцсети</p>
           </div>
+          <div className="footer-section">
+            <div className="social-icons">
+              <a 
+                href="https://t.me/avatarsintheschool" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="social-icon-link"
+              >
+                <img 
+                  src="/Property 1=white (1).png" 
+                  alt="Telegram" 
+                  className="social-icon"
+                />
+              </a>
+              <a 
+                href="https://vk.com/school148nsk" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="social-icon-link"
+              >
+                <img 
+                  src="/Property 1=white.png" 
+                  alt="ВКонтакте" 
+                  className="social-icon"
+                />
+              </a>
+            </div>
+          </div>
         </div>
+      </div>
+      <div className="footer-credits">
+        <p>Разработано командой СОЮЗ.РФ | WEBWAVE</p>
       </div>
     </footer>
   );
