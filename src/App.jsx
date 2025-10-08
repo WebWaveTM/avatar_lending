@@ -1,13 +1,11 @@
-import { useState, useEffect } from 'react'
-import Header from './components/Header'
-import Footer from './components/Footer'
-import './App.css'
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import './App.css';
 import ContactForm from './components/ContactForm';
+import Footer from './components/Footer';
+import Header from './components/Header';
+import { Marquee } from './components/Marquee';
 
 function App() {
-  const [count, setCount] = useState(0)
-  const navigate = useNavigate();
   const [showContactPopup, setShowContactPopup] = useState(false);
 
   useEffect(() => {
@@ -62,11 +60,16 @@ function App() {
               <li>Помогает детям лучше воспринимать информацию за счёт игровой формы</li>
             </ul>
           </div>
-          
-          <section id="how-it-works" className="section">
+
+            <div className="full-bleed">
+              <Marquee />
+            </div>
+          <section id="demo" className="section">
             <button className="ruby-button demo-button" onClick={() => console.log('Демо-ролик')}>
               Посмотреть демо-ролик
             </button>
+          </section>
+          <section id="how-it-works" className="section">
             <h2 className="section-title-black">Как это работает</h2>
             <p className="section-subtitle">3 простых шага к персонализированному обучению</p>
             <div className="how-it-works-flex">

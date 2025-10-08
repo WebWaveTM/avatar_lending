@@ -1390,6 +1390,16 @@ img, .responsive-img {
   object-fit: cover;
 }
 
+/* Full-bleed utility: lets inner content span full viewport width while inside centered containers */
+.full-bleed {
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  width: 100vw;
+}
+
 @media (max-width: 400px) {
   .main-content, .hero-section, .avatar-text, .section, .faq-container, .content-grid {
     padding: 0.5rem !important;
