@@ -13,7 +13,7 @@
   transition: all 0.3s ease;
   border-radius: 12px;
   width: auto;
-  min-width: 600px;
+  min-width: 650px;
   max-width: 90vw;
 }
 
@@ -39,7 +39,7 @@
 .nav-list {
   list-style: none;
   display: flex;
-  gap: 1rem;
+  gap: 40px;
   margin: 0;
   padding: 0;
   align-items: center;
@@ -50,10 +50,10 @@
   text-decoration: none;
   font-weight: 500;
   font-size: 0.9rem;
-  padding: 0.6rem 1.2rem;
   transition: all 0.3s ease;
   background: transparent;
   border: none;
+  width: 100%;
 }
 
 .nav-link:hover {
@@ -64,7 +64,7 @@
 @media (max-width: 768px) {
   .header {
     min-width: 90vw;
-    top: 10px;
+    top: 0;
     padding: 0.3rem 0;
     left: 50%;
     transform: translateX(-50%);

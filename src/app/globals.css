@@ -1,35 +1,151 @@
-#root {
-  max-width: 1280px;
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+
+  scroll-behavior: smooth;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+body {
+  margin: 0;
+  display: block; /* убираем вертикальное центрирование всего приложения */
+  min-width: 320px;
+  min-height: 100vh;
+  /* Многоцветный фон с хаотичными кругами-градиентами */
+  background:
+    radial-gradient(circle at 80% 10%, #ffffff 0%, #ffffff 25%, transparent 60%), /* белый блик */
+    radial-gradient(circle at 20% 20%, #FA9F3F 0%, #FA9F3F 40%, transparent 70%), /* оранжевый */
+    radial-gradient(circle at 70% 80%, #FCDC29 0%, #FCDC29 35%, transparent 70%), /* жёлтый */
+    radial-gradient(circle at 30% 70%, #B6D727 0%, #B6D727 30%, transparent 70%), /* зелёный */
+    #fff; /* fallback */
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+} 
+
+/* Делает карточки соцсетей полностью кликабельными без подчеркивания */
+.social-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  width: 100%;
+  max-width: 1260px;
   margin: 0 auto;
-  padding: 0;
-  text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+/* Горизонтальное выравнивание заголовка и картинки в соцблоках */
+.social-link .step {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: nowrap;
+  height: 168px;
+  box-sizing: border-box;
+  min-width: 400px;
+  width: 100%;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+.social-link .step h3 {
+  margin: 0;
+  font-size: 2rem;
+  line-height: 1.1;
+  flex: 1 1 auto;
+}
+
+.social-link .step img {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  margin-left: auto;
+  transform: translateX(100px);
+}
+
+/* Улучшение качества иконок социальных сетей */
+.social-icon-high-quality {
+  width: 96px !important;
+  height: 96px !important;
+  image-rendering: -webkit-optimize-contrast;
+  -ms-interpolation-mode: nearest-neighbor;
+}
+
+@media (max-width: 768px) {
+  .social-link {
+    width: 90%;
+    max-width: 90vw;
   }
-  to {
-    transform: rotate(360deg);
+  .social-link .step {
+    height: 144px;
+    gap: 1.25rem;
+    padding-right: 200px;
   }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+  .social-link .step img {
+    width: 64px;
+    height: 64px;
+    transform: translateX(100px);
+  }
+  .social-link .step h3 {
+    font-size: 1.6rem;
+  }
+  .social-icon-high-quality {
+    width: 80px !important;
+    height: 80px !important;
   }
 }
 
@@ -38,6 +154,42 @@
   display: flex;
   flex-direction: column;
   position: relative;
+}
+
+/* Фоновая картинка за первым (hero) блоком, не влияет на отступы main */
+/* Верхний хиро-блок с фоном на весь экран */
+.has-hero .hero {
+  width: 100dvw;
+  height: 100dvh;
+  background-image: url('/cat.webp');
+  background-size: cover;
+  background-position: center bottom;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0 0 120px 120px;
+  border-top: 1px solid transparent; /* предотвращает схлопывание верхних margin первого потомка */
+}
+
+/* Прижимаем hero к самому верху, убирая возможные промежутки фона body/app */
+.has-hero .hero {
+  margin: 0;
+}
+
+/* header фиксированный и центрированный задаётся в Header.css */
+
+/* Контент поверх фоновой заливки */
+.app > header,
+.app .main-content {
+  position: relative;
+  z-index: 1;
+}
+
+/* После полноэкранного hero убираем дополнительный отступ сверху у контента */
+.has-hero .main-content {
+  margin-top: 0 !important;
+  --main-top-offset: 0px;
 }
 
 .main-content {
@@ -49,6 +201,8 @@
   margin-top: 300px;
   position: relative;
   z-index: 1;
+  /* используем переменную для согласования с высотой hero */
+  --main-top-offset: 300px;
 }
 
 .hero-section {
@@ -59,13 +213,18 @@
   backdrop-filter: blur(15px);
   color: #2c3e50;
   border-radius: 12px;
-  margin-bottom: 3rem;
+  margin: 0 1rem; /* небольшой горизонтальный отступ в пределах хиро */
+  max-width: 1200px;
+  width: 100%;
   box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .hero-section h1 {
   font-size: 3rem;
-  margin-bottom: 1rem;
+  margin: 0 0 1rem 0; /* убираем верхний margin */
   font-weight: 700;
   color: #000000;
 }
@@ -108,7 +267,7 @@
 .avatar-text {
   text-align: center;
   padding: 2rem 0;
-  margin-top: 200px;
+  margin-top: 80px;
 }
 
 .avatar-title {
@@ -170,6 +329,8 @@
   font-weight: 500;
   letter-spacing: 0.5px;
   box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+  max-width: 300px;
+  margin: 0 auto;
 }
 
 .ruby-button:hover {
@@ -233,6 +394,7 @@
   .main-content {
     padding: 1.5rem;
     margin-top: 250px;
+    --main-top-offset: 250px;
   }
   
   .hero-section {
@@ -292,6 +454,8 @@
   }
   
   .step {
+    display: flex;
+    justify-content: space-between;
     padding: 1.8rem;
     max-width: 750px;
   }
@@ -867,6 +1031,7 @@
   .main-content {
     padding: 0.5rem;
     margin-top: 200px;
+    --main-top-offset: 200px;
   }
   
   .hero-section {
@@ -1046,11 +1211,40 @@
   background: #fff;
   border-radius: 24px;
   box-shadow: 0 8px 32px rgba(44,62,80,0.18);
-  padding: 2.5rem 2rem 2rem 2rem;
+  padding: 0; /* убрали паддинги, чтобы скролл был у края */
   max-width: 800px;
   width: 90%;
   position: relative;
   animation: popupIn 0.2s;
+  /* layout constraints for inner scrolling */
+  display: flex;
+  flex-direction: column;
+  /* limit popup by viewport and expose a CSS var for children */
+  --popup-max-h: 90vh;
+  max-height: var(--popup-max-h);
+  overflow-y: auto; /* скролл у края попапа */
+  overflow-x: hidden;
+}
+
+/* Тонкий полупрозрачный скролл у попапа, без видимого трека */
+.contact-popup {
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: rgba(0,0,0,0.35) transparent; /* бегунок/трек */
+}
+
+.contact-popup::-webkit-scrollbar {
+  width: 8px;
+}
+
+.contact-popup::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.contact-popup::-webkit-scrollbar-thumb {
+  background-color: rgba(0,0,0,0.35);
+  border-radius: 8px;
+  border: 2px solid transparent;
+  background-clip: content-box;
 }
 
 @keyframes popupIn {
@@ -1088,7 +1282,7 @@
   }
 }
 
-.background-image-container {
+/* .background-image-container {
   position: absolute;
   top: 0;
   left: 0;
@@ -1099,16 +1293,28 @@
   overflow: hidden;
   border-radius: 0 0 -50px -50px;
   margin-left: calc(-50vw + 50%);
-}
+} */
 
-.background-image {
+/* .background-image-container img {
+  object-fit: cover !important;
+} */
+
+/* .background-image {
   width: 100vw;
   height: 100%;
-  object-fit: cover;
+  object-fit: fill;
+  object-position: top;
   display: block;
   min-height: 1200px;
   min-width: 100vw;
   max-width: none;
+} */
+
+.background {
+  background-image: url('/cat.webp');
+  align-self: flex-start;
+  width: 100dvw;
+  height: 100dvh;
 }
 
 @media (max-width: 768px) {
@@ -1144,6 +1350,10 @@
   object-fit: contain;
 }
 
+.circle-ras-img img {
+  object-fit: contain !important;
+}
+
 @media (max-width: 768px) {
   .circle-ras-img {
     right: -40px;
@@ -1168,6 +1378,10 @@
   width: 300px;
   height: 300px;
   object-fit: contain;
+}
+
+.circle-cerebral-img img {
+  object-fit: contain !important;
 }
 
 @media (max-width: 768px) {
@@ -1196,6 +1410,10 @@
   object-fit: contain;
 }
 
+.circle-all-img img {
+  object-fit: contain !important;
+}
+
 @media (max-width: 768px) {
   .circle-all-img {
     right: -80px;
@@ -1217,6 +1435,7 @@
   .main-content {
     padding: 2rem;
     margin-top: 280px;
+    --main-top-offset: 280px;
   }
   
   .hero-section {
@@ -1414,4 +1633,44 @@ img, .responsive-img {
     font-size: 1rem !important;
     padding: 0.7rem 1.2rem !important;
   }
-} 
+}
+
+.faq-container-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+/* ===================== DEBUG LAYOUT STYLES =====================
+   Включение: добавьте класс 'debug-layout' на тег html или body.
+   Эти стили помогают визуально найти источник лишних отступов. */
+.debug-layout .app { outline: 2px solid rgba(255,0,0,0.6); }
+.debug-layout .has-hero .hero { outline: 2px solid rgba(0,255,0,0.6); }
+.debug-layout .hero-section { outline: 2px solid rgba(255,165,0,0.8); }
+.debug-layout .main-content { outline: 2px solid rgba(0,0,255,0.6); }
+.debug-layout header.header { outline: 2px solid rgba(255,0,255,0.6); }
+
+/* Барьер против схлопывания margin у первого потомка внутри hero */
+.debug-layout .has-hero .hero { overflow: auto; }
+
+/* Жёстко гасим возможный верхний margin заголовка в hero */
+.debug-layout .hero-section > h1 { margin-top: 0 !important; }
+
+/* Убеждаемся, что контент после hero не имеет зазора сверху */
+.debug-layout .has-hero .main-content { margin-top: 0 !important; }
+
+/* Индикатор активного debug-режима */
+.debug-layout body::before {
+  content: 'DEBUG';
+  position: fixed;
+  top: 0; left: 0;
+  z-index: 9999;
+  background: rgba(255,0,0,0.15);
+  color: #c00;
+  font: 12px/1 monospace;
+  padding: 2px 6px;
+  border-bottom-right-radius: 6px;
+}
+/* =================== END DEBUG LAYOUT STYLES =================== */

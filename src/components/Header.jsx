@@ -1,28 +1,19 @@
-import React from 'react';
+
 import './Header.css';
+import Link from 'next/link';
 
 function Header() {
-  const scrollToSection = (sectionId) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
 
   return (
     <header className="header">
       <div className="header-container">
         <nav className="nav">
           <ul className="nav-list">
-            <li><a href="#" className="nav-link" onClick={(e) => { e.preventDefault(); scrollToTop(); }}>О технологии</a></li>
-            <li><a href="#how-it-works" className="nav-link" onClick={(e) => { e.preventDefault(); scrollToSection('how-it-works'); }}>Как это работает</a></li>
-            <li><a href="#advantages" className="nav-link" onClick={(e) => { e.preventDefault(); scrollToSection('advantages'); }}>Преимущества для детей с ОВЗ</a></li>
-            <li><a href="#social-networks" className="nav-link" onClick={(e) => { e.preventDefault(); scrollToSection('social-networks'); }}>Наши соцсети</a></li>
-            <li><a href="#faq" className="nav-link" onClick={(e) => { e.preventDefault(); scrollToSection('faq'); }}>Вопросы и ответы</a></li>
+            <li><Link href="#" className="nav-link">О технологии</Link></li>
+            <li><Link href="#how-it-works" className="nav-link">Как это работает</Link></li>
+            <li><Link href="#advantages" className="nav-link">Преимущества для детей с ОВЗ</Link></li>
+            <li><Link href="#social-networks" className="nav-link">Наши соцсети</Link></li>
+            <li><Link href="#faq" className="nav-link">Вопросы и ответы</Link></li>
           </ul>
         </nav>
       </div>

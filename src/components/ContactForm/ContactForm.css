@@ -1,14 +1,27 @@
 .contact-form {
   background: transparent;
   border-radius: 32px;
-  padding: 2rem;
+  padding: 0; /* без паддингов — скролл у попапа */
   width: 100%;
-  max-width: 100%;
+  max-width: 95%;
   margin: 0;
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
   align-items: flex-start;
+  box-sizing: border-box;
+  /* высоту контролирует попап; форма не скроллируется */
+  max-height: none;
+  overflow: visible;
+}
+
+/* Внутренний контейнер с отступами, чтобы скролл был заподлицо с краем */
+.contact-form-inner {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  width: 100%;
   box-sizing: border-box;
 }
 
@@ -44,7 +57,7 @@
   background: rgba(255,255,255,0.8);
   font-size: 1.1rem;
   color: #2c3e50;
-  margin-bottom: 0.7rem;
+  margin-bottom: 0.3rem;
   outline: none;
   transition: border 0.2s;
   box-sizing: border-box;
@@ -52,6 +65,32 @@
 
 .contact-input:focus, .contact-textarea:focus {
   border: 1.5px solid #e74c3c;
+}
+
+/* Ошибки: красная рамка у полей в ошибке */
+.contact-input.has-error, .contact-textarea.has-error {
+  border-color: #e74c3c !important;
+}
+
+/* Сообщение об ошибке: фиксированная высота, не прыгает макет */
+.error-message {
+  height: 20px; /* фиксированная высота строки ошибки */
+  line-height: 20px;
+  color: #e74c3c; /* красный текст ошибки */
+  font-size: 0.9rem;
+  margin: 0 0 0.2rem 0;
+  visibility: visible;
+}
+.field-group {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+/* Скрытое состояние: занимает место, но не видно */
+.error-message.hidden {
+  visibility: hidden;
 }
 
 .contact-textarea {
@@ -69,6 +108,7 @@
   min-width: 0;
   box-sizing: border-box;
 }
+/* Убираем кастомизацию скролла с формы — теперь он у попапа */
 
 .contact-submit:disabled {
   opacity: 0.6;

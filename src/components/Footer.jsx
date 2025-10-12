@@ -1,5 +1,6 @@
-import React from 'react';
+
 import './Footer.css';
+import Image from 'next/image';
 
 function Footer() {
   return (
@@ -26,9 +27,11 @@ function Footer() {
                 rel="noopener noreferrer"
                 className="social-icon-link"
               >
-                <img 
+                <Image 
                   src="/Property 1=white (1).png" 
                   alt="Telegram" 
+                  width={32}
+                  height={32}
                   className="social-icon"
                 />
               </a>
@@ -38,9 +41,11 @@ function Footer() {
                 rel="noopener noreferrer"
                 className="social-icon-link"
               >
-                <img 
+                <Image 
                   src="/Property 1=white.png" 
                   alt="ВКонтакте" 
+                  width={32}
+                  height={32}
                   className="social-icon"
                 />
               </a>
