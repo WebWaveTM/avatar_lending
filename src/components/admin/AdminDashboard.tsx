@@ -3,6 +3,7 @@
 import * as React from 'react'
 import { Box, Tabs, Tab, Container, Typography, Paper, Button, Stack } from '@mui/material'
 import InquiriesTab from './InquiriesTab'
+import LandingSettingsTab from './LandingSettingsTab'
 import type { Inquiry } from '@/lib/db'
 import { signOut } from 'next-auth/react'
 import SettingsDialog from '@/components/admin/SettingsDialog'
@@ -56,14 +57,14 @@ export default function AdminDashboard({ inquiries, total, page, pageSize }: Pro
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <Tabs value={value} onChange={handleChange} aria-label="admin dashboard tabs">
               <Tab label="Обращения" {...a11yProps(0)} />
-              <Tab label="Вкладка 2" {...a11yProps(1)} />
+              <Tab label="Настройки лэндинга" {...a11yProps(1)} />
             </Tabs>
           </Box>
           <Box role="tabpanel" hidden={value !== 0} id="admin-tabpanel-0" aria-labelledby="admin-tab-0" sx={{ pt: 3 }}>
             {value === 0 && <InquiriesTab inquiries={inquiries} total={total} page={page} pageSize={pageSize} />}
           </Box>
           <Box role="tabpanel" hidden={value !== 1} id="admin-tabpanel-1" aria-labelledby="admin-tab-1" sx={{ pt: 3 }}>
-            {value === 1 && <Typography>Скоро…</Typography>}
+            {value === 1 && <LandingSettingsTab />}
           </Box>
         </Paper>
         <SettingsDialog

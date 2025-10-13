@@ -71,3 +71,30 @@ export async function deleteNotificationEmail(): Promise<void> {
   const del = db.prepare('DELETE FROM settings WHERE key = ?')
   del.run(SETTINGS_EMAIL_KEY)
 }
+
+const SETTINGS_LANDING_KEY = 'landing_settings'
+
+export type LandingSettings = {
+  header: { title: string; subtitle: string }
+  features: { items: string[] } // 4 items
+  video: { file: string | null }
+  howItWorks: { title: string; subtitle: string }[] // 3
+  whyUseful: { title: string; subtitle: string }[] // 3
+  socials: { telegram: string; vk: string }
+  faq: { items: { question: string; answer: string }[] } // up to 6
+}
+
+export async function getLandingSettings(): Promise<LandingSettings | null> {
+  const row = db.prepare('SELECT value FROM settings WHERE key = ?').get(SETTINGS_LANDING_KEY) as { value?: string } | undefined
+  if (!row?.value) return null
+  try {
+    return JSON.parse(row.value) as LandingSettings
+  } catch {
+    return null
+  }
+}
+
+export async function saveLandingSettings(settings: LandingSettings): Promise<void> {
+  const upsert = db.prepare('INSERT INTO settings (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value')
+  upsert.run(SETTINGS_LANDING_KEY, JSON.stringify(settings))
+}

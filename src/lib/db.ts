@@ -76,5 +76,5 @@ function seedInquiriesIfEmpty(): void {
   tx()
 }
 
-seedInquiriesIfEmpty()
+// seedInquiriesIfEmpty()
 

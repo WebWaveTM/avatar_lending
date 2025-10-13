@@ -1,4 +1,6 @@
 
+export const dynamic = 'force-dynamic'
+
 import ContactPopup from '@/components/ContactPopup';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
@@ -6,20 +8,88 @@ import { Marquee } from '../components/Marquee';
 import ContactPopupBtn from '@/components/ContactPopupBtn';
 import Link from 'next/link';
 import Image from 'next/image';
+import { getLandingSettings } from '@/lib/actions';
+import DemoModal from '@/components/DemoModal';
 
 
-export default function HomePage() {
+export default async function HomePage() {
+    const settings = await getLandingSettings();
+
+    const headerTitle = settings?.header?.title?.trim() || 'Цифровые аватары для образования';
+    const headerSubtitle = settings?.header?.subtitle?.trim() || 'Простая технология, которая делает онлайн-уроки персонализированными и комфортными для детей с ОВЗ';
+
+    const featureFallback = [
+        'Точь-в-точь повторяет движения ваших глаз, рта и головы в целом',
+        'Работает в реальном времени во время онлайн-уроков',
+        'Не требует сложного оборудования - только веб-камера',
+        'Помогает детям лучше воспринимать информацию за счёт игровой формы',
+    ];
+    const featureItems = [0,1,2,3].map((i) => {
+        const v = (settings?.features?.items && settings.features.items[i]) ? String(settings.features.items[i]).trim() : ''
+        return v || featureFallback[i]
+    })
+
+    const hiwDefault = [
+        { title: 'Подключение', subtitle: '' },
+        { title: 'Настройка', subtitle: 'Выберете аватара' },
+        { title: 'Использование', subtitle: 'Аватар автоматически оживёт и будет повторять вашу мимику' },
+    ];
+    const hiwItems = [0,1,2].map((i) => {
+        const src = (Array.isArray(settings?.howItWorks) && settings!.howItWorks![i]) ? settings!.howItWorks![i] : { title: '', subtitle: '' }
+        const title = (src.title || '').trim() || hiwDefault[i].title
+        const subtitle = (src.subtitle || '').trim() || hiwDefault[i].subtitle
+        return { title, subtitle }
+    })
+
+    const whyDefault = [
+        { title: 'Для детей с РАС', subtitle: 'предсказуемый визуальный образ снижает тревожность' },
+        { title: 'Для детей с ДЦП', subtitle: 'упрощённая визуализация речи' },
+        { title: 'Для всех', subtitle: 'делает онлайн-обучение более увлекательным' },
+    ];
+    const whyItems = [0,1,2].map((i) => {
+        const src = (Array.isArray(settings?.whyUseful) && settings!.whyUseful![i]) ? settings!.whyUseful![i] : { title: '', subtitle: '' }
+        const title = (src.title || '').trim() || whyDefault[i].title
+        const subtitle = (src.subtitle || '').trim() || whyDefault[i].subtitle
+        return { title, subtitle }
+    })
+
+    const tg = settings?.socials?.telegram?.trim() || 'https://t.me/avatarsintheschool';
+    const vk = settings?.socials?.vk?.trim() || 'https://vk.com/school148nsk';
+
+    const faqDefault = [
+        {
+            question: 'Как именно работает аватар',
+            answer: 'Аватар - это интеллектуальная маска, которая в реальном времени повторяет вашу мимику. Система анализирует движения глаз и губ через веб-камеру и синхронизирует их с анимированным персонажем.',
+        },
+        {
+            question: 'Какое оборудование нужно для работы?',
+            answer: 'Достаточно обычного компьютера или ноутбука с веб-камерой и микрофоном. Специальные устройства не требуются.',
+        },
+        {
+            question: 'Можно ли настроить внешность аватара?',
+            answer: 'Нет, но есть выбор персонажа',
+        },
+        {
+            question: 'С какими платформами работает?',
+            answer: 'Система совместима с Zoom',
+        },
+    ];
+    const faqFromSettings = Array.isArray(settings?.faq?.items) ? settings!.faq!.items : []
+    const faqSanitized = faqFromSettings
+        .map((it) => ({
+            question: (it?.question || '').trim(),
+            answer: (it?.answer || '').trim(),
+        }))
+        .filter((it) => it.question || it.answer)
+    const faqItems = faqSanitized.length > 0 ? faqSanitized : faqDefault
     return (
         <>
             <Header />
             <div className="app has-hero">
                 <section className="hero">
                     <div className="hero-section">
-                        <h1>Цифровые аватары для образования</h1>
-                        <p>
-                            Простая технология, которая делает онлайн-уроки персонализированными<br />
-                            и комфортными для детей с ОВЗ
-                        </p>
+                        <h1>{headerTitle}</h1>
+                        <p>{headerSubtitle}</p>
                         <Link className="ruby-button" href="#how-it-works">
                             Как это работает?
                         </Link>
@@ -36,10 +106,9 @@ export default function HomePage() {
                             Создаём анимированного персонажа, который:
                         </p>
                         <ul className="avatar-features">
-                            <li>Точь-в-точь повторяет движения ваших глаз, рта и головы в целом</li>
-                            <li>Работает в реальном времени во время онлайн-уроков</li>
-                            <li>Не требует сложного оборудования - только<br />веб-камера</li>
-                            <li>Помогает детям лучше воспринимать информацию за счёт игровой формы</li>
+                            {featureItems.map((text, idx) => (
+                                <li key={idx}>{text}</li>
+                            ))}
                         </ul>
                     </div>
 
@@ -47,26 +116,19 @@ export default function HomePage() {
                         <Marquee />
                     </div>
                     <section id="demo" className="section">
-                        <button className="ruby-button demo-button">
-                            Посмотреть демо-ролик
-                        </button>
+                        <DemoModal videoUrl={settings?.video?.file ?? null} />
                     </section>
                     <section id="how-it-works" className="section">
                         <h2 className="section-title-black">Как это работает</h2>
                         <p className="section-subtitle">3 простых шага к персонализированному обучению</p>
                         <div className="how-it-works-flex">
                             <div className="steps-container">
-                                <div className="step">
-                                    <h3>Подключение</h3>
-                                </div>
-                                <div className="step">
-                                    <h3>Настройка</h3>
-                                    <p>Выберете аватара</p>
-                                </div>
-                                <div className="step">
-                                    <h3>Использование</h3>
-                                    <p>Аватар автоматически оживёт и будет повторять вашу мимику</p>
-                                </div>
+                                {hiwItems.map((s, i) => (
+                                    <div className="step" key={i}>
+                                        <h3>{s.title}</h3>
+                                        {s.subtitle ? <p>{s.subtitle}</p> : null}
+                                    </div>
+                                ))}
                             </div>
                             <div className="how-it-works-image-wrapper">
                                 <Image
@@ -84,8 +146,8 @@ export default function HomePage() {
                         <h2>Преимущества для детей с ОВЗ</h2>
                         <div className="advantages-circles">
                             <div className="circle circle-ras">
-                                <h3>Для детей с РАС</h3>
-                                <p>предсказуемый визуальный<br />образ снижает тревожность</p>
+                                <h3>{whyItems[0].title}</h3>
+                                <p>{whyItems[0].subtitle}</p>
                                 <Image
                                     src="/165ac1b28d268b622310720a8db346497dd4fce2.png"
                                     alt="avatar"
@@ -95,8 +157,8 @@ export default function HomePage() {
                                 />
                             </div>
                             <div className="circle circle-cerebral">
-                                <h3>Для детей с ДЦП</h3>
-                                <p>упрощённая<br />визуализация речи</p>
+                                <h3>{whyItems[1].title}</h3>
+                                <p>{whyItems[1].subtitle}</p>
                                 <Image
                                     src="/fc738c77b83caf8ad59db7d2ed3b31dc2bda8b5f.png"
                                     alt="avatar"
@@ -106,8 +168,8 @@ export default function HomePage() {
                                 />
                             </div>
                             <div className="circle circle-all">
-                                <h3>Для всех</h3>
-                                <p>делает онлайн-обучение<br />более увлекательным</p>
+                                <h3>{whyItems[2].title}</h3>
+                                <p>{whyItems[2].subtitle}</p>
                                 <Image
                                     src="/0cfba77f13102428d4a2b2b4b36a369a1b6ee40c.png"
                                     alt="avatar"
@@ -133,7 +195,7 @@ export default function HomePage() {
                             </div>
                             <div className="steps-container">
                                 <a
-                                    href="https://t.me/avatarsintheschool"
+                                    href={tg}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="social-link"
@@ -166,7 +228,7 @@ export default function HomePage() {
                                     </div>
                                 </a>
                                 <a
-                                    href="https://vk.com/school148nsk"
+                                    href={vk}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="social-link"
@@ -205,22 +267,12 @@ export default function HomePage() {
                     <section id="faq" className="section">
                         <h2 className="section-title-black">Часто задаваемые вопросы</h2>
                         <div className="faq-container">
-                            <div className="faq-item">
-                                <h3>1. Как именно работает аватар</h3>
-                                <p>Аватар - это интеллектуальная маска, которая в реальном времени повторяет вашу мимику. Система анализирует движения глаз и губ через веб-камеру и синхронизирует их с анимированным персонажем.</p>
-                            </div>
-                            <div className="faq-item">
-                                <h3>2. Какое оборудование нужно для работы?</h3>
-                                <p>Достаточно обычного компьютера или ноутбука с веб-камерой и микрофоном. Специальные устройства не требуются.</p>
-                            </div>
-                            <div className="faq-item">
-                                <h3>3. Можно ли настроить внешность аватара?</h3>
-                                <p>Нет, но есть выбор персонажа</p>
-                            </div>
-                            <div className="faq-item">
-                                <h3>4. С какими платформами работает?</h3>
-                                <p>Система совместима с Zoom</p>
-                            </div>
+                            {faqItems.map((f, idx) => (
+                                <div className="faq-item" key={idx}>
+                                    <h3>{idx + 1}. {f.question}</h3>
+                                    <p>{f.answer}</p>
+                                </div>
+                            ))}
                         </div>
                         <div className="faq-contact">
                             <span className="faq-contact-text">Не нашли ответ?</span>
