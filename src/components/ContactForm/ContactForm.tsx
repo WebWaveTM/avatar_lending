@@ -4,6 +4,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import './ContactForm.css';
 import { useForm } from 'react-hook-form';
 import z from 'zod';
+import toast from 'react-hot-toast';
+import { createInquiry } from '@/lib/actions';
 
 const formData = z.object({
   name: z.string({error: 'ФИО обязательно для заполнения'}).nonempty({error: 'ФИО обязательно для заполнения'}),
@@ -20,8 +22,11 @@ export default function ContactForm() {
 
   
 
-  const onSubmit = handleSubmit(data => {
-    console.log(data);
+  const onSubmit = handleSubmit(async data => {
+    await createInquiry(data);
+    toast.success('Ваше обращение успешно отправлено');
+  }, () => {
+    toast.error('Произошла ошибка при отправке. Попробуйте еще раз.');
   });
 
   return (
@@ -69,7 +74,7 @@ export default function ContactForm() {
       <div className="field-group">
         <textarea 
           className={`contact-textarea${errors.question ? ' has-error' : ''}`} 
-          rows="6" 
+          rows={6}
           aria-invalid={!!errors.question}
           aria-describedby="error-question"
           {...register('question')}
