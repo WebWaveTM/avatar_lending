@@ -115,4 +115,4 @@ local.properties
 # --- Images generated at runtime ---
 *.orig
 
-
+var/

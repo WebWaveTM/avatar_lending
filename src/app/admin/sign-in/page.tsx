@@ -1,5 +1,6 @@
 'use client'
 
+import { Suspense } from 'react'
 import { signIn } from 'next-auth/react'
 import { Button, Container, TextField, Typography, Box, Paper, Alert } from '@mui/material'
 import { useSearchParams, useRouter } from 'next/navigation'
@@ -13,7 +14,7 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>
 
-export default function SignInPage() {
+function SignInForm() {
   const searchParams = useSearchParams()
   const router = useRouter()
 
@@ -79,6 +80,14 @@ export default function SignInPage() {
         </Paper>
       </Container>
     </Box>
+  )
+}
+
+export default function SignInPage() {
+  return (
+    <Suspense fallback={<Box sx={{ p: 4, textAlign: 'center' }}>Загрузка…</Box>}>
+      <SignInForm />
+    </Suspense>
   )
 }
 
