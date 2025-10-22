@@ -12,15 +12,12 @@
   z-index: 1000;
   transition: all 0.3s ease;
   border-radius: 12px;
-  width: auto;
+  width: max-content;
   min-width: 650px;
-  max-width: 90vw;
+  max-width: 95dvw;
 }
 
 .header-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   padding: 0 2rem;
 }
 
@@ -39,10 +36,17 @@
 .nav-list {
   list-style: none;
   display: flex;
-  gap: 40px;
+  column-gap: 40px;
+  row-gap: 10px;
   margin: 0;
   padding: 0;
   align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.nav-list li {
+  white-space: nowrap;
 }
 
 .nav-link {

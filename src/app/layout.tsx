@@ -12,7 +12,7 @@ const ysabeauInfant = Ysabeau_Infant({
 })
 
 export const metadata: Metadata = {
-  title: 'Avatar Project',
+  title: 'Цифровые аватары для образования',
   description: 'Цифровые аватары для образования',
 }
 

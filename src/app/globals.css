@@ -207,15 +207,14 @@ button:focus-visible {
 
 .hero-section {
   text-align: center;
-  padding: 4rem 0;
+  padding: 50px;
   background: rgba(255, 255, 255, 0.3);
   -webkit-backdrop-filter: blur(15px);
   backdrop-filter: blur(15px);
   color: #2c3e50;
-  border-radius: 12px;
-  margin: 0 1rem; /* небольшой горизонтальный отступ в пределах хиро */
-  max-width: 1200px;
-  width: 100%;
+  border-radius: 48px;
+  max-width: 1100px;
+  width: 90%;
   box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
@@ -258,7 +257,7 @@ button:focus-visible {
 
 .hero-section p {
   font-size: 1.5rem;
-  margin-bottom: 2rem;
+  margin-bottom: 24px;
   color: #000000;
   opacity: 0.8;
   line-height: 1.5;
@@ -585,7 +584,7 @@ button:focus-visible {
   line-height: 1.6;
 }
 
-.section h2::after {
+/* .section h2::after {
   content: '';
   position: absolute;
   bottom: -10px;
@@ -595,7 +594,7 @@ button:focus-visible {
   height: 3px;
   background: linear-gradient(90deg, #3498db, #2980b9);
   border-radius: 2px;
-}
+} */
 
 /* Секция "О технологии" */
 .content-grid {
@@ -755,12 +754,12 @@ button:focus-visible {
 }
 
 .circle h3 {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   font-weight: 700;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0;
   color: #2c3e50;
   text-align: left;
-  width: 100%;
+  width: 80%;
 }
 
 .circle p {
@@ -769,7 +768,7 @@ button:focus-visible {
   color: #2c3e50;
   font-weight: 500;
   text-align: left;
-  width: 100%;
+  width: 80%;
 }
 
 @media (max-width: 900px) {
@@ -1342,7 +1341,7 @@ button:focus-visible {
 
 .circle-ras-img {
   position: absolute;
-  right: -120px;
+  right: -150px;
   top: 50%;
   transform: translateY(-50%);
   width: 300px;
@@ -1356,7 +1355,7 @@ button:focus-visible {
 
 @media (max-width: 768px) {
   .circle-ras-img {
-    right: -40px;
+    right: -75px;
     width: 150px;
     height: 150px;
   }
@@ -1364,7 +1363,7 @@ button:focus-visible {
 
 @media (max-width: 480px) {
   .circle-ras-img {
-    right: -20px;
+    right: -60px;
     width: 120px;
     height: 120px;
   }
@@ -1372,7 +1371,7 @@ button:focus-visible {
 
 .circle-cerebral-img {
   position: absolute;
-  right: -170px;
+  right: -180px;
   top: 50%;
   transform: translateY(-50%);
   width: 300px;
@@ -1386,7 +1385,7 @@ button:focus-visible {
 
 @media (max-width: 768px) {
   .circle-cerebral-img {
-    right: -80px;
+    right: -140px;
     width: 200px;
     height: 200px;
   }
@@ -1394,7 +1393,7 @@ button:focus-visible {
 
 @media (max-width: 480px) {
   .circle-cerebral-img {
-    right: -40px;
+    right: -70px;
     width: 150px;
     height: 150px;
   }
@@ -1402,7 +1401,7 @@ button:focus-visible {
 
 .circle-all-img {
   position: absolute;
-  right: -160px;
+  right: -170px;
   top: 50%;
   transform: translateY(-50%);
   width: 300px;
@@ -1416,7 +1415,7 @@ button:focus-visible {
 
 @media (max-width: 768px) {
   .circle-all-img {
-    right: -80px;
+    right: -120px;
     width: 200px;
     height: 200px;
   }
