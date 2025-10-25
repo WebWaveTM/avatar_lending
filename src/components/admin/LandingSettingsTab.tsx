@@ -24,7 +24,7 @@ const schema = z.object({
     .array(z.object({ title: z.string().max(50).optional().default(''), subtitle: z.string().max(200).optional().default('') }))
     .length(3),
   whyUseful: z
-    .array(z.object({ title: z.string().max(40).optional().default(''), subtitle: z.string().max(100).optional().default('') }))
+    .array(z.object({ title: z.string().max(40).optional().default(''), subtitle: z.string().max(100).optional().default(''), image: z.string().nullable().optional().default(null) }))
     .length(3),
   socials: z.object({
     telegram: z.string().trim().url('Некорректная ссылка').or(z.literal('')).default(''),
@@ -50,9 +50,9 @@ const defaults: FormValues = {
     { title: '', subtitle: '' },
   ],
   whyUseful: [
-    { title: '', subtitle: '' },
-    { title: '', subtitle: '' },
-    { title: '', subtitle: '' },
+    { title: '', subtitle: '', image: null },
+    { title: '', subtitle: '', image: null },
+    { title: '', subtitle: '', image: null },
   ],
   socials: { telegram: '', vk: '' },
   faq: { items: [] },
@@ -61,7 +61,8 @@ const defaults: FormValues = {
 export default function LandingSettingsTab() {
   const [loading, setLoading] = React.useState(true)
   const [pendingVideoFile, setPendingVideoFile] = React.useState<File | null>(null)
-  const { register, handleSubmit, control, reset, setValue, formState: { errors, isSubmitting } } = useForm<FormValues>({
+  const [pendingImages, setPendingImages] = React.useState<Array<File | null>>([null, null, null])
+  const { register, handleSubmit, control, reset, setValue, watch, formState: { errors, isSubmitting } } = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: defaults,
   })
@@ -94,14 +95,68 @@ export default function LandingSettingsTab() {
         if (!res.ok) throw new Error(json?.error || 'Upload failed')
         videoUrl = json.url
       }
-      const parsed = schema.parse({ ...values, video: { file: videoUrl } })
+      // Upload images for advantages if selected
+      const imageUrls: Array<string | null> = [null, null, null]
+      for (let i = 0; i < 3; i++) {
+        const img = pendingImages[i]
+        if (img) {
+          const form = new FormData()
+          form.append('file', img)
+          form.append('index', String(i))
+          const res = await fetch('/api/landing/advantages/upload', { method: 'POST', body: form })
+          const json = await res.json()
+          if (!res.ok) throw new Error(json?.error || 'Upload failed')
+          imageUrls[i] = json.url as string
+        }
+      }
+
+      const nextValues = { ...values, video: { file: videoUrl } }
+      // merge returned image urls into whyUseful
+      const mergedWhy = [0,1,2].map((i) => ({
+        title: nextValues.whyUseful[i]?.title ?? '',
+        subtitle: nextValues.whyUseful[i]?.subtitle ?? '',
+        image: imageUrls[i] ?? nextValues.whyUseful[i]?.image ?? null,
+      }))
+
+      const parsed = schema.parse({ ...nextValues, whyUseful: mergedWhy })
       await saveLandingSettings(parsed as LandingSettings)
       toast.success('Настройки сохранены')
       setPendingVideoFile(null)
+      setPendingImages([null, null, null])
     } catch {
       toast.error('Ошибка при сохранении')
     }
   })
+
+  const handleDeleteVideo = async () => {
+    try {
+      const res = await fetch('/api/landing/video', { method: 'DELETE' })
+      const json = await res.json()
+      if (!res.ok) throw new Error(json?.error || 'Delete failed')
+      setValue('video.file', null)
+      setPendingVideoFile(null)
+      toast.success('Видео удалено')
+    } catch {
+      toast.error('Ошибка при удалении видео')
+    }
+  }
+
+  const handleDeleteImage = async (i: number) => {
+    try {
+      const res = await fetch(`/api/landing/advantages?index=${i}`, { method: 'DELETE' })
+      const json = await res.json()
+      if (!res.ok) throw new Error(json?.error || 'Delete failed')
+      setValue(`whyUseful.${i}.image` as const, null)
+      setPendingImages((prev) => {
+        const next = [...prev]
+        next[i] = null
+        return next
+      })
+      toast.success('Картинка удалена')
+    } catch {
+      toast.error('Ошибка при удалении картинки')
+    }
+  }
 
   if (loading) {
     return <Typography color="text.secondary">Загрузка…</Typography>
@@ -140,6 +195,11 @@ export default function LandingSettingsTab() {
             setPendingVideoFile(file ?? null)
           }} />
           <Typography variant="caption" color="text.secondary">{pendingVideoFile ? `Выбран файл: ${pendingVideoFile.name}. Он будет загружен при сохранении.` : 'До 500 МБ. Файл будет загружен при сохранении.'}</Typography>
+          {watch('video.file') ? (
+            <Box>
+              <Button color="error" variant="outlined" onClick={handleDeleteVideo}>Удалить видео</Button>
+            </Box>
+          ) : null}
 
           <Divider />
 
@@ -165,6 +225,27 @@ export default function LandingSettingsTab() {
               </Grid>
               <Grid size={{xs: 12, md: 6}}>
                 <TextField label="Подпись" fullWidth {...register(`whyUseful.${i}.subtitle` as const)} error={!!errors.whyUseful?.[i]?.subtitle} helperText={errors.whyUseful?.[i]?.subtitle?.message} />
+              </Grid>
+              <Grid size={{xs: 12}}>
+                <Typography variant="subtitle2">Картинка (круг {i+1})</Typography>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    const file = e.currentTarget.files?.[0] ?? null
+                    setPendingImages((prev) => {
+                      const next = [...prev]
+                      next[i] = file
+                      return next
+                    })
+                  }}
+                />
+                <Typography variant="caption" color="text.secondary">{pendingImages[i] ? `Выбран файл: ${pendingImages[i]!.name}. Он будет загружен при сохранении.` : 'До 15 МБ. Файл будет загружен при сохранении.'}</Typography>
+                {watch(`whyUseful.${i}.image` as const) ? (
+                  <Box sx={{ mt: 1 }}>
+                    <Button color="error" variant="outlined" onClick={() => handleDeleteImage(i)}>Удалить картинку</Button>
+                  </Box>
+                ) : null}
               </Grid>
             </Grid>
           ))}

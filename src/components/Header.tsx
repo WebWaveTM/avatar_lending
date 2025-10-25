@@ -9,7 +9,7 @@ function Header() {
       <div className="header-container">
         <nav className="nav">
           <ul className="nav-list">
-            <li><Link href="#" className="nav-link">О технологии</Link></li>
+            <li><Link href="#about" className="nav-link">О технологии</Link></li>
             <li><Link href="#how-it-works" className="nav-link">Как это работает</Link></li>
             <li><Link href="#advantages" className="nav-link">Преимущества для детей с ОВЗ</Link></li>
             <li><Link href="#social-networks" className="nav-link">Наши соцсети</Link></li>

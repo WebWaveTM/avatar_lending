@@ -46,11 +46,17 @@ export default async function HomePage() {
         { title: 'Для детей с ДЦП', subtitle: 'упрощённая визуализация речи' },
         { title: 'Для всех', subtitle: 'делает онлайн-обучение более увлекательным' },
     ];
+    const whyImagesDefault = [
+        '/165ac1b28d268b622310720a8db346497dd4fce2.png',
+        '/fc738c77b83caf8ad59db7d2ed3b31dc2bda8b5f.png',
+        '/0cfba77f13102428d4a2b2b4b36a369a1b6ee40c.png',
+    ]
     const whyItems = [0,1,2].map((i) => {
-        const src = (Array.isArray(settings?.whyUseful) && settings!.whyUseful![i]) ? settings!.whyUseful![i] : { title: '', subtitle: '' }
+        const src = (Array.isArray(settings?.whyUseful) && settings!.whyUseful![i]) ? settings!.whyUseful![i] as any : { title: '', subtitle: '', image: null as string | null }
         const title = (src.title || '').trim() || whyDefault[i].title
         const subtitle = (src.subtitle || '').trim() || whyDefault[i].subtitle
-        return { title, subtitle }
+        const image = (typeof src.image === 'string' ? src.image.trim() : '') || whyImagesDefault[i]
+        return { title, subtitle, image }
     })
 
     const tg = settings?.socials?.telegram?.trim() || 'https://t.me/avatarsintheschool';
@@ -98,7 +104,7 @@ export default async function HomePage() {
                 <main className="main-content">
 
                     <div className="avatar-text">
-                        <h2 className="avatar-title">
+                        <h2 id="about" className="avatar-title">
                             Цифровой аватар -<br />
                             это Умная 3D маска для видеочатов
                         </h2>
@@ -149,7 +155,7 @@ export default async function HomePage() {
                                 <h3>{whyItems[0].title}</h3>
                                 <p>{whyItems[0].subtitle}</p>
                                 <Image
-                                    src="/165ac1b28d268b622310720a8db346497dd4fce2.png"
+                                    src={whyItems[0].image}
                                     alt="avatar"
                                     width={300}
                                     height={300}
@@ -160,7 +166,7 @@ export default async function HomePage() {
                                 <h3>{whyItems[1].title}</h3>
                                 <p>{whyItems[1].subtitle}</p>
                                 <Image
-                                    src="/fc738c77b83caf8ad59db7d2ed3b31dc2bda8b5f.png"
+                                    src={whyItems[1].image}
                                     alt="avatar"
                                     width={300}
                                     height={300}
@@ -171,7 +177,7 @@ export default async function HomePage() {
                                 <h3>{whyItems[2].title}</h3>
                                 <p>{whyItems[2].subtitle}</p>
                                 <Image
-                                    src="/0cfba77f13102428d4a2b2b4b36a369a1b6ee40c.png"
+                                    src={whyItems[2].image}
                                     alt="avatar"
                                     width={300}
                                     height={300}

@@ -79,7 +79,7 @@ export type LandingSettings = {
   features: { items: string[] } // 4 items
   video: { file: string | null }
   howItWorks: { title: string; subtitle: string }[] // 3
-  whyUseful: { title: string; subtitle: string }[] // 3
+  whyUseful: { title: string; subtitle: string; image?: string | null }[] // 3
   socials: { telegram: string; vk: string }
   faq: { items: { question: string; answer: string }[] } // up to 6
 }
