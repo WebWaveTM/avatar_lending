@@ -36,8 +36,15 @@ export async function POST(req: NextRequest) {
 
     // Remove previous file for this index if present in settings
     const current = (await getLandingSettings()) || ({} as LandingSettings)
-    const currentWhy = Array.isArray(current.whyUseful) ? current.whyUseful : []
-    const prevUrl = currentWhy[index]?.image || null
+    const currentWhy = current.whyUseful || {
+      item1: { title: '', subtitle: '', image: null },
+      item2: { title: '', subtitle: '', image: null },
+      item3: { title: '', subtitle: '', image: null },
+    }
+    
+    const keys: Array<'item1' | 'item2' | 'item3'> = ['item1', 'item2', 'item3']
+    const key = keys[index]
+    const prevUrl = currentWhy[key]?.image || null
     if (prevUrl && prevUrl.startsWith('/api/landing/advantages/')) {
       const prevName = prevUrl.split('/').pop()
       if (prevName) {
@@ -51,19 +58,29 @@ export async function POST(req: NextRequest) {
     fs.writeFileSync(filePath, buffer)
 
     // Update settings (merge, keep others intact)
-    const updatedWhy = [0,1,2].map((i) => {
-      const src = currentWhy[i] || { title: '', subtitle: '', image: null as string | null }
-      if (i === index) {
-        return { title: src.title || '', subtitle: src.subtitle || '', image: `/api/landing/advantages/${filename}` }
-      }
-      return { title: src.title || '', subtitle: src.subtitle || '', image: src.image ?? null }
-    })
+    const updatedWhy: LandingSettings['whyUseful'] = {
+      item1: {
+        title: currentWhy.item1?.title || '',
+        subtitle: currentWhy.item1?.subtitle || '',
+        image: key === 'item1' ? `/api/landing/advantages/${filename}` : (currentWhy.item1?.image ?? null),
+      },
+      item2: {
+        title: currentWhy.item2?.title || '',
+        subtitle: currentWhy.item2?.subtitle || '',
+        image: key === 'item2' ? `/api/landing/advantages/${filename}` : (currentWhy.item2?.image ?? null),
+      },
+      item3: {
+        title: currentWhy.item3?.title || '',
+        subtitle: currentWhy.item3?.subtitle || '',
+        image: key === 'item3' ? `/api/landing/advantages/${filename}` : (currentWhy.item3?.image ?? null),
+      },
+    }
 
     const updated: LandingSettings = {
       header: current.header || { title: '', subtitle: '' },
       features: current.features || { items: ['', '', '', ''] },
       video: current.video || { file: null },
-      howItWorks: current.howItWorks || [
+      howItWorks: Array.isArray(current.howItWorks) ? current.howItWorks : [
         { title: '', subtitle: '' },
         { title: '', subtitle: '' },
         { title: '', subtitle: '' },

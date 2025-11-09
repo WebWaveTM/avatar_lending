@@ -79,7 +79,11 @@ export type LandingSettings = {
   features: { items: string[] } // 4 items
   video: { file: string | null }
   howItWorks: { title: string; subtitle: string }[] // 3
-  whyUseful: { title: string; subtitle: string; image?: string | null }[] // 3
+  whyUseful: {
+    item1: { title: string; subtitle: string; image?: string | null }
+    item2: { title: string; subtitle: string; image?: string | null }
+    item3: { title: string; subtitle: string; image?: string | null }
+  }
   socials: { telegram: string; vk: string }
   faq: { items: { question: string; answer: string }[] } // up to 6
 }
@@ -88,7 +92,18 @@ export async function getLandingSettings(): Promise<LandingSettings | null> {
   const row = db.prepare('SELECT value FROM settings WHERE key = ?').get(SETTINGS_LANDING_KEY) as { value?: string } | undefined
   if (!row?.value) return null
   try {
-    return JSON.parse(row.value) as LandingSettings
+    const parsed = JSON.parse(row.value) as any
+    // Migrate whyUseful from array to object format if needed
+    if (parsed.whyUseful && Array.isArray(parsed.whyUseful)) {
+      parsed.whyUseful = {
+        item1: parsed.whyUseful[0] || { title: '', subtitle: '', image: null },
+        item2: parsed.whyUseful[1] || { title: '', subtitle: '', image: null },
+        item3: parsed.whyUseful[2] || { title: '', subtitle: '', image: null },
+      }
+      // Save migrated data back to database
+      await saveLandingSettings(parsed as LandingSettings)
+    }
+    return parsed as LandingSettings
   } catch {
     return null
   }

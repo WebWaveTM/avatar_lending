@@ -41,23 +41,38 @@ export default async function HomePage() {
         return { title, subtitle }
     })
 
-    const whyDefault = [
-        { title: 'Для детей с РАС', subtitle: 'предсказуемый визуальный образ снижает тревожность' },
-        { title: 'Для детей с ДЦП', subtitle: 'упрощённая визуализация речи' },
-        { title: 'Для всех', subtitle: 'делает онлайн-обучение более увлекательным' },
-    ];
-    const whyImagesDefault = [
-        '/165ac1b28d268b622310720a8db346497dd4fce2.png',
-        '/fc738c77b83caf8ad59db7d2ed3b31dc2bda8b5f.png',
-        '/0cfba77f13102428d4a2b2b4b36a369a1b6ee40c.png',
+    const whyDefault = {
+        item1: { title: 'Для детей с РАС', subtitle: 'предсказуемый визуальный образ снижает тревожность' },
+        item2: { title: 'Для детей с ДЦП', subtitle: 'упрощённая визуализация речи' },
+        item3: { title: 'Для всех', subtitle: 'делает онлайн-обучение более увлекательным' },
+    };
+    const whyImagesDefault = {
+        item1: '/165ac1b28d268b622310720a8db346497dd4fce2.png',
+        item2: '/fc738c77b83caf8ad59db7d2ed3b31dc2bda8b5f.png',
+        item3: '/0cfba77f13102428d4a2b2b4b36a369a1b6ee40c.png',
+    }
+    const whyUseful = settings?.whyUseful || {
+        item1: { title: '', subtitle: '', image: null },
+        item2: { title: '', subtitle: '', image: null },
+        item3: { title: '', subtitle: '', image: null },
+    }
+    const whyItems = [
+        {
+            title: (whyUseful.item1?.title || '').trim() || whyDefault.item1.title,
+            subtitle: (whyUseful.item1?.subtitle || '').trim() || whyDefault.item1.subtitle,
+            image: (typeof whyUseful.item1?.image === 'string' ? whyUseful.item1.image.trim() : '') || whyImagesDefault.item1,
+        },
+        {
+            title: (whyUseful.item2?.title || '').trim() || whyDefault.item2.title,
+            subtitle: (whyUseful.item2?.subtitle || '').trim() || whyDefault.item2.subtitle,
+            image: (typeof whyUseful.item2?.image === 'string' ? whyUseful.item2.image.trim() : '') || whyImagesDefault.item2,
+        },
+        {
+            title: (whyUseful.item3?.title || '').trim() || whyDefault.item3.title,
+            subtitle: (whyUseful.item3?.subtitle || '').trim() || whyDefault.item3.subtitle,
+            image: (typeof whyUseful.item3?.image === 'string' ? whyUseful.item3.image.trim() : '') || whyImagesDefault.item3,
+        },
     ]
-    const whyItems = [0,1,2].map((i) => {
-        const src = (Array.isArray(settings?.whyUseful) && settings!.whyUseful![i]) ? settings!.whyUseful![i] as any : { title: '', subtitle: '', image: null as string | null }
-        const title = (src.title || '').trim() || whyDefault[i].title
-        const subtitle = (src.subtitle || '').trim() || whyDefault[i].subtitle
-        const image = (typeof src.image === 'string' ? src.image.trim() : '') || whyImagesDefault[i]
-        return { title, subtitle, image }
-    })
 
     const tg = settings?.socials?.telegram?.trim() || 'https://t.me/avatarsintheschool';
     const vk = settings?.socials?.vk?.trim() || 'https://vk.com/school148nsk';

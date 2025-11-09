@@ -23,9 +23,11 @@ const schema = z.object({
   howItWorks: z
     .array(z.object({ title: z.string().max(50).optional().default(''), subtitle: z.string().max(200).optional().default('') }))
     .length(3),
-  whyUseful: z
-    .array(z.object({ title: z.string().max(40).optional().default(''), subtitle: z.string().max(100).optional().default(''), image: z.string().nullable().optional().default(null) }))
-    .length(3),
+  whyUseful: z.object({
+    item1: z.object({ title: z.string().max(40).optional().default(''), subtitle: z.string().max(100).optional().default(''), image: z.string().nullable().optional().default(null) }),
+    item2: z.object({ title: z.string().max(40).optional().default(''), subtitle: z.string().max(100).optional().default(''), image: z.string().nullable().optional().default(null) }),
+    item3: z.object({ title: z.string().max(40).optional().default(''), subtitle: z.string().max(100).optional().default(''), image: z.string().nullable().optional().default(null) }),
+  }),
   socials: z.object({
     telegram: z.string().trim().url('Некорректная ссылка').or(z.literal('')).default(''),
     vk: z.string().trim().url('Некорректная ссылка').or(z.literal('')).default(''),
@@ -49,11 +51,11 @@ const defaults: FormValues = {
     { title: '', subtitle: '' },
     { title: '', subtitle: '' },
   ],
-  whyUseful: [
-    { title: '', subtitle: '', image: null },
-    { title: '', subtitle: '', image: null },
-    { title: '', subtitle: '', image: null },
-  ],
+  whyUseful: {
+    item1: { title: '', subtitle: '', image: null },
+    item2: { title: '', subtitle: '', image: null },
+    item3: { title: '', subtitle: '', image: null },
+  },
   socials: { telegram: '', vk: '' },
   faq: { items: [] },
 }
@@ -96,9 +98,11 @@ export default function LandingSettingsTab() {
         videoUrl = json.url
       }
       // Upload images for advantages if selected
-      const imageUrls: Array<string | null> = [null, null, null]
+      const imageKeys: Array<'item1' | 'item2' | 'item3'> = ['item1', 'item2', 'item3']
+      const imageUrls: Record<'item1' | 'item2' | 'item3', string | null> = { item1: null, item2: null, item3: null }
       for (let i = 0; i < 3; i++) {
         const img = pendingImages[i]
+        const key = imageKeys[i]
         if (img) {
           const form = new FormData()
           form.append('file', img)
@@ -106,17 +110,29 @@ export default function LandingSettingsTab() {
           const res = await fetch('/api/landing/advantages/upload', { method: 'POST', body: form })
           const json = await res.json()
           if (!res.ok) throw new Error(json?.error || 'Upload failed')
-          imageUrls[i] = json.url as string
+          imageUrls[key] = json.url as string
         }
       }
 
       const nextValues = { ...values, video: { file: videoUrl } }
       // merge returned image urls into whyUseful
-      const mergedWhy = [0,1,2].map((i) => ({
-        title: nextValues.whyUseful[i]?.title ?? '',
-        subtitle: nextValues.whyUseful[i]?.subtitle ?? '',
-        image: imageUrls[i] ?? nextValues.whyUseful[i]?.image ?? null,
-      }))
+      const mergedWhy = {
+        item1: {
+          title: nextValues.whyUseful.item1?.title ?? '',
+          subtitle: nextValues.whyUseful.item1?.subtitle ?? '',
+          image: imageUrls.item1 ?? nextValues.whyUseful.item1?.image ?? null,
+        },
+        item2: {
+          title: nextValues.whyUseful.item2?.title ?? '',
+          subtitle: nextValues.whyUseful.item2?.subtitle ?? '',
+          image: imageUrls.item2 ?? nextValues.whyUseful.item2?.image ?? null,
+        },
+        item3: {
+          title: nextValues.whyUseful.item3?.title ?? '',
+          subtitle: nextValues.whyUseful.item3?.subtitle ?? '',
+          image: imageUrls.item3 ?? nextValues.whyUseful.item3?.image ?? null,
+        },
+      }
 
       const parsed = schema.parse({ ...nextValues, whyUseful: mergedWhy })
       await saveLandingSettings(parsed as LandingSettings)
@@ -146,7 +162,8 @@ export default function LandingSettingsTab() {
       const res = await fetch(`/api/landing/advantages?index=${i}`, { method: 'DELETE' })
       const json = await res.json()
       if (!res.ok) throw new Error(json?.error || 'Delete failed')
-      setValue(`whyUseful.${i}.image` as const, null)
+      const key = ['item1', 'item2', 'item3'][i] as 'item1' | 'item2' | 'item3'
+      setValue(`whyUseful.${key}.image` as const, null)
       setPendingImages((prev) => {
         const next = [...prev]
         next[i] = null
@@ -218,16 +235,20 @@ export default function LandingSettingsTab() {
           <Divider />
 
           <Typography variant="h6">Почему это полезно</Typography>
-          {[0,1,2].map((i) => (
-            <Grid container spacing={2} key={i}>
+          {[
+            { key: 'item1' as const, index: 0, label: 'круг 1' },
+            { key: 'item2' as const, index: 1, label: 'круг 2' },
+            { key: 'item3' as const, index: 2, label: 'круг 3' },
+          ].map(({ key, index, label }) => (
+            <Grid container spacing={2} key={key}>
               <Grid size={{xs: 12, md: 6}}>
-                <TextField label="Заголовок" fullWidth {...register(`whyUseful.${i}.title` as const)} error={!!errors.whyUseful?.[i]?.title} helperText={errors.whyUseful?.[i]?.title?.message} />
+                <TextField label="Заголовок" fullWidth {...register(`whyUseful.${key}.title` as const)} error={!!errors.whyUseful?.[key]?.title} helperText={errors.whyUseful?.[key]?.title?.message} />
               </Grid>
               <Grid size={{xs: 12, md: 6}}>
-                <TextField label="Подпись" fullWidth {...register(`whyUseful.${i}.subtitle` as const)} error={!!errors.whyUseful?.[i]?.subtitle} helperText={errors.whyUseful?.[i]?.subtitle?.message} />
+                <TextField label="Подпись" fullWidth {...register(`whyUseful.${key}.subtitle` as const)} error={!!errors.whyUseful?.[key]?.subtitle} helperText={errors.whyUseful?.[key]?.subtitle?.message} />
               </Grid>
               <Grid size={{xs: 12}}>
-                <Typography variant="subtitle2">Картинка (круг {i+1})</Typography>
+                <Typography variant="subtitle2">Картинка ({label})</Typography>
                 <input
                   type="file"
                   accept="image/*"
@@ -235,15 +256,15 @@ export default function LandingSettingsTab() {
                     const file = e.currentTarget.files?.[0] ?? null
                     setPendingImages((prev) => {
                       const next = [...prev]
-                      next[i] = file
+                      next[index] = file
                       return next
                     })
                   }}
                 />
-                <Typography variant="caption" color="text.secondary">{pendingImages[i] ? `Выбран файл: ${pendingImages[i]!.name}. Он будет загружен при сохранении.` : 'До 15 МБ. Файл будет загружен при сохранении.'}</Typography>
-                {watch(`whyUseful.${i}.image` as const) ? (
+                <Typography variant="caption" color="text.secondary">{pendingImages[index] ? `Выбран файл: ${pendingImages[index]!.name}. Он будет загружен при сохранении.` : 'До 15 МБ. Файл будет загружен при сохранении.'}</Typography>
+                {watch(`whyUseful.${key}.image` as const) ? (
                   <Box sx={{ mt: 1 }}>
-                    <Button color="error" variant="outlined" onClick={() => handleDeleteImage(i)}>Удалить картинку</Button>
+                    <Button color="error" variant="outlined" onClick={() => handleDeleteImage(index)}>Удалить картинку</Button>
                   </Box>
                 ) : null}
               </Grid>

@@ -217,6 +217,8 @@ button:focus-visible {
   z-index: 1;
   /* используем переменную для согласования с высотой hero */
   --main-top-offset: 300px;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 .hero-section {
@@ -483,6 +485,7 @@ button:focus-visible {
   
   .advantages-circles {
     gap: 2rem;
+    min-height: 700px;
   }
   
   .circle-ras {
@@ -514,21 +517,21 @@ button:focus-visible {
   }
   
   .circle-ras-img {
-    right: -100px;
-    width: 250px;
-    height: 250px;
+    right: -80px;
+    width: 200px;
+    height: 200px;
   }
   
   .circle-cerebral-img {
-    right: -140px;
-    width: 250px;
-    height: 250px;
+    right: -100px;
+    width: 200px;
+    height: 200px;
   }
   
   .circle-all-img {
-    right: -130px;
-    width: 250px;
-    height: 250px;
+    right: -90px;
+    width: 200px;
+    height: 200px;
   }
   
   .faq-item {
@@ -580,6 +583,10 @@ button:focus-visible {
 .section {
   padding: 4rem 0;
   margin-bottom: 2rem;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 .section h2 {
@@ -719,12 +726,24 @@ button:focus-visible {
 }
 
 /* Секция "Преимущества для детей с ОВЗ" */
+#advantages {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
 .advantages-circles {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1.5rem;
   margin-top: 3rem;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  position: relative;
+  min-height: 800px; /* Минимальная высота чтобы предотвратить обрезание при отрицательных margin-top */
 }
 
 .circle-ras {
@@ -790,6 +809,7 @@ button:focus-visible {
     flex-direction: column;
     align-items: center;
     gap: 1.5rem;
+    min-height: auto;
   }
   .circle-ras, .circle-cerebral, .circle-all {
     margin: 0;
@@ -801,6 +821,7 @@ button:focus-visible {
   .advantages-circles {
     gap: 2rem;
     margin-top: 2rem;
+    min-height: auto;
   }
   
   .circle-ras {
@@ -835,11 +856,19 @@ button:focus-visible {
   .circle p {
     font-size: 0.9rem;
   }
+  
+  /* На мобильных устройствах скрываем изображения справа или уменьшаем их */
+  .circle-ras-img,
+  .circle-cerebral-img,
+  .circle-all-img {
+    display: none;
+  }
 }
 
 @media (max-width: 480px) {
   .advantages-circles {
     gap: 1.5rem;
+    min-height: auto;
   }
   
   .circle-ras {
@@ -868,16 +897,25 @@ button:focus-visible {
   .circle p {
     font-size: 0.8rem;
   }
+  
+  /* На маленьких экранах полностью скрываем изображения */
+  .circle-ras-img,
+  .circle-cerebral-img,
+  .circle-all-img {
+    display: none;
+  }
 }
 
 /* Секция "Вопросы и ответы" */
 .faq-container {
   max-width: 100%;
+  width: 100%;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1.5rem;
+  box-sizing: border-box;
 }
 
 .faq-item {
@@ -888,9 +926,11 @@ button:focus-visible {
   box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
   width: 100%;
+  max-width: 100%;
   border: 1px solid rgba(255, 255, 255, 0.2);
   text-align: left;
   overflow: hidden;
+  box-sizing: border-box;
 }
 
 .faq-item:hover {
@@ -906,6 +946,11 @@ button:focus-visible {
   padding: 1.5rem 1.5rem 0.5rem 1.5rem;
   background: none;
   text-align: left;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  box-sizing: border-box;
+  max-width: 100%;
 }
 
 .faq-item p {
@@ -917,34 +962,74 @@ button:focus-visible {
   padding: 0 1.5rem 1.5rem 1.5rem;
   background: none;
   text-align: left;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  box-sizing: border-box;
+  max-width: 100%;
 }
 
 @media (max-width: 768px) {
+  .faq-container {
+    width: 100%;
+    padding: 0;
+    box-sizing: border-box;
+  }
   .faq-item {
     max-width: 100%;
+    width: 100%;
     padding: 1rem;
+    box-sizing: border-box;
   }
   .faq-item h3 {
     font-size: 1.1rem;
     padding: 1rem 1rem 0.5rem 1rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    max-width: 100%;
+    box-sizing: border-box;
   }
   .faq-item p {
     font-size: 1rem;
     padding: 0 1rem 1rem 1rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 }
 
 @media (max-width: 480px) {
+  .faq-container {
+    width: 100%;
+    padding: 0;
+    box-sizing: border-box;
+  }
   .faq-item {
     padding: 0.8rem;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
   .faq-item h3 {
     font-size: 1rem;
     padding: 0.8rem 0.5rem 0.3rem 0.5rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    max-width: 100%;
+    box-sizing: border-box;
   }
   .faq-item p {
     font-size: 0.9rem;
     padding: 0 0.5rem 0.8rem 0.5rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 }
 
@@ -1100,14 +1185,36 @@ button:focus-visible {
     font-size: 0.9rem;
   }
   
+  .faq-container {
+    width: 100%;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  .faq-item {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  
   .faq-item h3 {
     font-size: 1rem;
     padding: 1rem 0.5rem 0.5rem 0.5rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    max-width: 100%;
+    box-sizing: border-box;
   }
   
   .faq-item p {
     font-size: 0.9rem;
     padding: 0 0.5rem 1rem 0.5rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    max-width: 100%;
+    box-sizing: border-box;
   }
   
   .ruby-button {
@@ -1367,19 +1474,25 @@ button:focus-visible {
   object-fit: contain !important;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1200px) {
   .circle-ras-img {
-    right: -75px;
-    width: 150px;
-    height: 150px;
+    right: -100px;
+    width: 200px;
+    height: 200px;
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 900px) {
   .circle-ras-img {
-    right: -60px;
+    right: -50px;
     width: 120px;
     height: 120px;
+  }
+}
+
+@media (max-width: 768px) {
+  .circle-ras-img {
+    display: none;
   }
 }
 
@@ -1397,19 +1510,25 @@ button:focus-visible {
   object-fit: contain !important;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1200px) {
   .circle-cerebral-img {
-    right: -140px;
+    right: -120px;
     width: 200px;
     height: 200px;
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 900px) {
   .circle-cerebral-img {
-    right: -70px;
-    width: 150px;
-    height: 150px;
+    right: -60px;
+    width: 120px;
+    height: 120px;
+  }
+}
+
+@media (max-width: 768px) {
+  .circle-cerebral-img {
+    display: none;
   }
 }
 
@@ -1427,19 +1546,25 @@ button:focus-visible {
   object-fit: contain !important;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1200px) {
   .circle-all-img {
-    right: -120px;
+    right: -110px;
     width: 200px;
     height: 200px;
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 900px) {
   .circle-all-img {
-    right: -40px;
-    width: 150px;
-    height: 150px;
+    right: -50px;
+    width: 120px;
+    height: 120px;
+  }
+}
+
+@media (max-width: 768px) {
+  .circle-all-img {
+    display: none;
   }
 }
 
@@ -1522,6 +1647,7 @@ button:focus-visible {
   
   .advantages-circles {
     gap: 2.2rem;
+    min-height: 750px;
   }
   
   .circle-ras {
@@ -1553,21 +1679,21 @@ button:focus-visible {
   }
   
   .circle-ras-img {
-    right: -110px;
-    width: 270px;
-    height: 270px;
+    right: -100px;
+    width: 250px;
+    height: 250px;
   }
   
   .circle-cerebral-img {
-    right: -150px;
-    width: 270px;
-    height: 270px;
+    right: -130px;
+    width: 250px;
+    height: 250px;
   }
   
   .circle-all-img {
-    right: -140px;
-    width: 270px;
-    height: 270px;
+    right: -120px;
+    width: 250px;
+    height: 250px;
   }
   
   .faq-item {
