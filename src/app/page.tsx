@@ -141,7 +141,7 @@ export default async function HomePage() {
                     </section>
                     <section id="how-it-works" className="section">
                         <h2 className="section-title-black">Как это работает</h2>
-                        <p className="section-subtitle">3 простых шага к персонализированному обучению</p>
+                        <p className="section-subtitle">{settings?.howItWorksSubtitle?.trim() || '3 простых шага к персонализированному обучению'}</p>
                         <div className="how-it-works-flex">
                             <div className="steps-container">
                                 {hiwItems.map((s, i) => (

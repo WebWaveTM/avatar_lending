@@ -1,5 +1,7 @@
 .marquee {
   width: 100%;
+  min-width: 100%;
+  max-width: 100%;
   overflow: clip;
   color: #000000;
   font-weight: 600;
@@ -7,6 +9,7 @@
   position: relative;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.4) 20%, rgba(255, 255, 255, 0.4) 80%, rgba(255, 255, 255, 0.8) 100%);
   padding: 60px 0;
+  box-sizing: border-box;
 }
 
 .marqueeContent {

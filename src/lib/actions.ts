@@ -79,6 +79,7 @@ export type LandingSettings = {
   features: { items: string[] } // 4 items
   video: { file: string | null }
   howItWorks: { title: string; subtitle: string }[] // 3
+  howItWorksSubtitle?: string // subtitle for "How it works" section
   whyUseful: {
     item1: { title: string; subtitle: string; image?: string | null }
     item2: { title: string; subtitle: string; image?: string | null }

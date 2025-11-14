@@ -218,7 +218,7 @@ button:focus-visible {
   /* используем переменную для согласования с высотой hero */
   --main-top-offset: 300px;
   box-sizing: border-box;
-  overflow-x: hidden;
+  overflow-x: visible;
 }
 
 .hero-section {
@@ -459,20 +459,26 @@ button:focus-visible {
   }
   
   .how-it-works-image {
-    margin-left: 150px;
+    margin-left: 100px;
     max-width: 280px;
     max-height: 500px;
   }
   
   .steps-container {
     gap: 1.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    max-width: 100%;
+    box-sizing: border-box;
   }
   
   .step {
     display: flex;
     justify-content: space-between;
     padding: 1.8rem;
-    max-width: 750px;
+    max-width: 800px;
+    width: 100%;
+    box-sizing: border-box;
   }
   
   .step h3 {
@@ -731,6 +737,7 @@ button:focus-visible {
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
+  overflow-x: visible;
 }
 
 .advantages-circles {
@@ -744,6 +751,9 @@ button:focus-visible {
   box-sizing: border-box;
   position: relative;
   min-height: 800px; /* Минимальная высота чтобы предотвратить обрезание при отрицательных margin-top */
+  padding-right: 6rem;
+  padding-left: 2rem;
+  overflow-x: visible;
 }
 
 .circle-ras {
@@ -1623,18 +1633,24 @@ button:focus-visible {
   }
   
   .how-it-works-image {
-    margin-left: 180px;
-    max-width: 300px;
-    max-height: 550px;
+    margin-left: 120px;
+    max-width: 320px;
+    max-height: 580px;
   }
   
   .steps-container {
     gap: 1.8rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    max-width: 100%;
+    box-sizing: border-box;
   }
   
   .step {
     padding: 2rem;
-    max-width: 900px;
+    max-width: 800px;
+    width: 100%;
+    box-sizing: border-box;
   }
   
   .step h3 {
@@ -1756,6 +1772,8 @@ img, .responsive-img {
   margin-left: -50vw;
   margin-right: -50vw;
   width: 100vw;
+  max-width: none;
+  box-sizing: border-box;
 }
 
 @media (max-width: 400px) {

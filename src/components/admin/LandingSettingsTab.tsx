@@ -20,9 +20,12 @@ const schema = z.object({
   video: z.object({
     file: z.string().nullable().optional().default(null), // video url
   }),
-  howItWorks: z
-    .array(z.object({ title: z.string().max(50).optional().default(''), subtitle: z.string().max(200).optional().default('') }))
-    .length(3),
+  howItWorks: z.object({
+    subtitle: z.string().max(100, 'Макс 100 символов').optional().default(''),
+    items: z
+      .array(z.object({ title: z.string().max(50).optional().default(''), subtitle: z.string().max(200).optional().default('') }))
+      .length(3),
+  }),
   whyUseful: z.object({
     item1: z.object({ title: z.string().max(40).optional().default(''), subtitle: z.string().max(100).optional().default(''), image: z.string().nullable().optional().default(null) }),
     item2: z.object({ title: z.string().max(40).optional().default(''), subtitle: z.string().max(100).optional().default(''), image: z.string().nullable().optional().default(null) }),
@@ -34,7 +37,10 @@ const schema = z.object({
   }),
   faq: z.object({
     items: z
-      .array(z.object({ question: z.string().optional().default(''), answer: z.string().optional().default('') }))
+      .array(z.object({ 
+        question: z.string().max(200, 'Макс 200 символов').optional().default(''), 
+        answer: z.string().max(500, 'Макс 500 символов').optional().default('') 
+      }))
       .max(6, 'Макс 6 вопросов')
       .default([]),
   }),
@@ -46,11 +52,14 @@ const defaults: FormValues = {
   header: { title: '', subtitle: '' },
   features: { items: ['', '', '', ''] },
   video: { file: null },
-  howItWorks: [
-    { title: '', subtitle: '' },
-    { title: '', subtitle: '' },
-    { title: '', subtitle: '' },
-  ],
+  howItWorks: {
+    subtitle: '',
+    items: [
+      { title: '', subtitle: '' },
+      { title: '', subtitle: '' },
+      { title: '', subtitle: '' },
+    ],
+  },
   whyUseful: {
     item1: { title: '', subtitle: '', image: null },
     item2: { title: '', subtitle: '', image: null },
@@ -77,7 +86,19 @@ export default function LandingSettingsTab() {
       try {
         const saved = await getLandingSettings()
         if (mounted && saved) {
-          reset(saved as FormValues)
+          // Transform saved data to form structure
+          const formData = {
+            ...saved,
+            howItWorks: {
+              subtitle: (saved as any).howItWorksSubtitle || '',
+              items: saved.howItWorks || [
+                { title: '', subtitle: '' },
+                { title: '', subtitle: '' },
+                { title: '', subtitle: '' },
+              ],
+            },
+          }
+          reset(formData as FormValues)
         }
       } finally {
         if (mounted) setLoading(false)
@@ -135,7 +156,13 @@ export default function LandingSettingsTab() {
       }
 
       const parsed = schema.parse({ ...nextValues, whyUseful: mergedWhy })
-      await saveLandingSettings(parsed as LandingSettings)
+      // Transform howItWorks structure for saving
+      const transformed = {
+        ...parsed,
+        howItWorks: parsed.howItWorks.items || [],
+        howItWorksSubtitle: parsed.howItWorks.subtitle || '',
+      }
+      await saveLandingSettings(transformed as LandingSettings)
       toast.success('Настройки сохранены')
       setPendingVideoFile(null)
       setPendingImages([null, null, null])
@@ -221,13 +248,25 @@ export default function LandingSettingsTab() {
           <Divider />
 
           <Typography variant="h6">Как это работает</Typography>
+          <Grid container spacing={2}>
+            <Grid size={{xs: 12}}>
+              <TextField 
+                label="Подзаголовок секции" 
+                fullWidth 
+                {...register('howItWorks.subtitle')} 
+                error={!!errors.howItWorks?.subtitle} 
+                helperText={errors.howItWorks?.subtitle?.message || 'Макс 100 символов'}
+                inputProps={{ maxLength: 100 }}
+              />
+            </Grid>
+          </Grid>
           {[0,1,2].map((i) => (
             <Grid container spacing={2} key={i}>
               <Grid size={{xs: 12, md: 6}}>
-                <TextField label="Заголовок" fullWidth {...register(`howItWorks.${i}.title` as const)} error={!!errors.howItWorks?.[i]?.title} helperText={errors.howItWorks?.[i]?.title?.message} />
+                <TextField label="Заголовок" fullWidth {...register(`howItWorks.items.${i}.title` as const)} error={!!errors.howItWorks?.items?.[i]?.title} helperText={errors.howItWorks?.items?.[i]?.title?.message} />
               </Grid>
               <Grid size={{xs: 12, md: 6}}>
-                <TextField label="Подпись" fullWidth {...register(`howItWorks.${i}.subtitle` as const)} error={!!errors.howItWorks?.[i]?.subtitle} helperText={errors.howItWorks?.[i]?.subtitle?.message} />
+                <TextField label="Подпись" fullWidth {...register(`howItWorks.items.${i}.subtitle` as const)} error={!!errors.howItWorks?.items?.[i]?.subtitle} helperText={errors.howItWorks?.items?.[i]?.subtitle?.message} />
               </Grid>
             </Grid>
           ))}
@@ -291,10 +330,26 @@ export default function LandingSettingsTab() {
               <Paper key={f.id} variant="outlined" sx={{ p: 2, borderRadius: 2 }}>
                 <Grid container spacing={2}>
                   <Grid size={{xs: 12}}>
-                    <TextField label="Вопрос" fullWidth {...register(`faq.items.${idx}.question` as const)} />
+                    <TextField 
+                      label="Вопрос" 
+                      fullWidth 
+                      {...register(`faq.items.${idx}.question` as const)} 
+                      error={!!errors.faq?.items?.[idx]?.question}
+                      helperText={errors.faq?.items?.[idx]?.question?.message || 'Макс 200 символов'}
+                      inputProps={{ maxLength: 200 }}
+                    />
                   </Grid>
                   <Grid size={{xs: 12}}>
-                    <TextField label="Ответ" fullWidth multiline minRows={2} {...register(`faq.items.${idx}.answer` as const)} />
+                    <TextField 
+                      label="Ответ" 
+                      fullWidth 
+                      multiline 
+                      minRows={2} 
+                      {...register(`faq.items.${idx}.answer` as const)} 
+                      error={!!errors.faq?.items?.[idx]?.answer}
+                      helperText={errors.faq?.items?.[idx]?.answer?.message || 'Макс 500 символов'}
+                      inputProps={{ maxLength: 500 }}
+                    />
                   </Grid>
                   <Grid size={{xs: 12}}>
                     <Button color="error" onClick={() => faqArray.remove(idx)}>Удалить</Button>
