@@ -26,11 +26,11 @@ export async function DELETE(_req: NextRequest) {
         { title: '', subtitle: '' },
         { title: '', subtitle: '' },
       ],
-      whyUseful: (Array.isArray(current.whyUseful) ? current.whyUseful : [
-        { title: '', subtitle: '', image: null },
-        { title: '', subtitle: '', image: null },
-        { title: '', subtitle: '', image: null },
-      ]),
+      whyUseful: current.whyUseful || {
+        item1: { title: '', subtitle: '', image: null },
+        item2: { title: '', subtitle: '', image: null },
+        item3: { title: '', subtitle: '', image: null },
+      },
       socials: current.socials || { telegram: '', vk: '' },
       faq: current.faq || { items: [] },
     }

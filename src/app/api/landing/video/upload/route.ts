@@ -47,11 +47,11 @@ export async function POST(req: NextRequest) {
         { title: '', subtitle: '' },
         { title: '', subtitle: '' },
       ],
-      whyUseful: current.whyUseful || [
-        { title: '', subtitle: '' },
-        { title: '', subtitle: '' },
-        { title: '', subtitle: '' },
-      ],
+      whyUseful: current.whyUseful || {
+        item1: { title: '', subtitle: '', image: null },
+        item2: { title: '', subtitle: '', image: null },
+        item3: { title: '', subtitle: '', image: null },
+      },
       socials: current.socials || { telegram: '', vk: '' },
       faq: current.faq || { items: [] },
     }
