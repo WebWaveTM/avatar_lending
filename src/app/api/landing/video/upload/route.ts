@@ -47,6 +47,8 @@ export async function POST(req: NextRequest) {
         { title: '', subtitle: '' },
         { title: '', subtitle: '' },
       ],
+      howItWorksImage: current.howItWorksImage ?? null,
+      socialsImage: current.socialsImage ?? null,
       whyUseful: current.whyUseful || {
         item1: { title: '', subtitle: '', image: null },
         item2: { title: '', subtitle: '', image: null },

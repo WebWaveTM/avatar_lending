@@ -73,6 +73,9 @@ export default function LandingSettingsTab() {
   const [loading, setLoading] = React.useState(true)
   const [pendingVideoFile, setPendingVideoFile] = React.useState<File | null>(null)
   const [pendingImages, setPendingImages] = React.useState<Array<File | null>>([null, null, null])
+  const [pendingHowItWorksImage, setPendingHowItWorksImage] = React.useState<File | null>(null)
+  const [pendingSocialsImage, setPendingSocialsImage] = React.useState<File | null>(null)
+  const [savedSettings, setSavedSettings] = React.useState<LandingSettings | null>(null)
   const { register, handleSubmit, control, reset, setValue, watch, formState: { errors, isSubmitting } } = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: defaults,
@@ -86,6 +89,7 @@ export default function LandingSettingsTab() {
       try {
         const saved = await getLandingSettings()
         if (mounted && saved) {
+          setSavedSettings(saved)
           // Transform saved data to form structure
           const formData = {
             ...saved,
@@ -97,6 +101,8 @@ export default function LandingSettingsTab() {
                 { title: '', subtitle: '' },
               ],
             },
+            howItWorksImage: (saved as any).howItWorksImage || null,
+            socialsImage: (saved as any).socialsImage || null,
           }
           reset(formData as FormValues)
         }
@@ -135,6 +141,30 @@ export default function LandingSettingsTab() {
         }
       }
 
+      // Upload howItWorks image if selected
+      let howItWorksImageUrl = (values as any).howItWorksImage || null
+      if (pendingHowItWorksImage) {
+        const form = new FormData()
+        form.append('file', pendingHowItWorksImage)
+        form.append('type', 'how-it-works')
+        const res = await fetch('/api/landing/images/upload', { method: 'POST', body: form })
+        const json = await res.json()
+        if (!res.ok) throw new Error(json?.error || 'Upload failed')
+        howItWorksImageUrl = json.url
+      }
+
+      // Upload socials image if selected
+      let socialsImageUrl = (values as any).socialsImage || null
+      if (pendingSocialsImage) {
+        const form = new FormData()
+        form.append('file', pendingSocialsImage)
+        form.append('type', 'socials')
+        const res = await fetch('/api/landing/images/upload', { method: 'POST', body: form })
+        const json = await res.json()
+        if (!res.ok) throw new Error(json?.error || 'Upload failed')
+        socialsImageUrl = json.url
+      }
+
       const nextValues = { ...values, video: { file: videoUrl } }
       // merge returned image urls into whyUseful
       const mergedWhy = {
@@ -161,11 +191,15 @@ export default function LandingSettingsTab() {
         ...parsed,
         howItWorks: parsed.howItWorks.items || [],
         howItWorksSubtitle: parsed.howItWorks.subtitle || '',
+        howItWorksImage: howItWorksImageUrl,
+        socialsImage: socialsImageUrl,
       }
       await saveLandingSettings(transformed as LandingSettings)
       toast.success('Настройки сохранены')
       setPendingVideoFile(null)
       setPendingImages([null, null, null])
+      setPendingHowItWorksImage(null)
+      setPendingSocialsImage(null)
     } catch {
       toast.error('Ошибка при сохранении')
     }
@@ -259,6 +293,34 @@ export default function LandingSettingsTab() {
                 inputProps={{ maxLength: 100 }}
               />
             </Grid>
+            <Grid size={{xs: 12}}>
+              <Typography variant="subtitle2">Изображение для секции</Typography>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => {
+                  const file = e.currentTarget.files?.[0] ?? null
+                  setPendingHowItWorksImage(file)
+                }}
+              />
+              <Typography variant="caption" color="text.secondary">{pendingHowItWorksImage ? `Выбран файл: ${pendingHowItWorksImage.name}. Он будет загружен при сохранении.` : 'До 15 МБ. Файл будет загружен при сохранении.'}</Typography>
+              {(watch('howItWorksImage' as any) || savedSettings?.howItWorksImage) ? (
+                <Box sx={{ mt: 1 }}>
+                  <Button color="error" variant="outlined" onClick={async () => {
+                    try {
+                      const res = await fetch('/api/landing/images?type=how-it-works', { method: 'DELETE' })
+                      const json = await res.json()
+                      if (!res.ok) throw new Error(json?.error || 'Delete failed')
+                      setValue('howItWorksImage' as any, null)
+                      setPendingHowItWorksImage(null)
+                      toast.success('Изображение удалено')
+                    } catch {
+                      toast.error('Ошибка при удалении изображения')
+                    }
+                  }}>Удалить изображение</Button>
+                </Box>
+              ) : null}
+            </Grid>
           </Grid>
           {[0,1,2].map((i) => (
             <Grid container spacing={2} key={i}>
@@ -319,6 +381,34 @@ export default function LandingSettingsTab() {
             </Grid>
             <Grid size={{xs: 12, md: 6}}>
               <TextField label="VK" fullWidth {...register('socials.vk')} error={!!errors.socials?.vk} helperText={errors.socials?.vk?.message} />
+            </Grid>
+            <Grid size={{xs: 12}}>
+              <Typography variant="subtitle2">Изображение для секции</Typography>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => {
+                  const file = e.currentTarget.files?.[0] ?? null
+                  setPendingSocialsImage(file)
+                }}
+              />
+              <Typography variant="caption" color="text.secondary">{pendingSocialsImage ? `Выбран файл: ${pendingSocialsImage.name}. Он будет загружен при сохранении.` : 'До 15 МБ. Файл будет загружен при сохранении.'}</Typography>
+              {(watch('socialsImage' as any) || savedSettings?.socialsImage) ? (
+                <Box sx={{ mt: 1 }}>
+                  <Button color="error" variant="outlined" onClick={async () => {
+                    try {
+                      const res = await fetch('/api/landing/images?type=socials', { method: 'DELETE' })
+                      const json = await res.json()
+                      if (!res.ok) throw new Error(json?.error || 'Delete failed')
+                      setValue('socialsImage' as any, null)
+                      setPendingSocialsImage(null)
+                      toast.success('Изображение удалено')
+                    } catch {
+                      toast.error('Ошибка при удалении изображения')
+                    }
+                  }}>Удалить изображение</Button>
+                </Box>
+              ) : null}
             </Grid>
           </Grid>
 

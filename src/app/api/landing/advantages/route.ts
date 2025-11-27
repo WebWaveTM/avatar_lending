@@ -59,6 +59,8 @@ export async function DELETE(req: NextRequest) {
         { title: '', subtitle: '' },
         { title: '', subtitle: '' },
       ],
+      howItWorksImage: current.howItWorksImage ?? null,
+      socialsImage: current.socialsImage ?? null,
       whyUseful: updatedWhy,
       socials: current.socials || { telegram: '', vk: '' },
       faq: current.faq || { items: [] },

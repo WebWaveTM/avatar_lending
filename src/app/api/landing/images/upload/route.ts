@@ -14,11 +14,12 @@ export async function POST(req: NextRequest) {
     }
     const formData = await req.formData()
     const file = formData.get('file') as File | null
-    const indexRaw = formData.get('index')
-    const index = typeof indexRaw === 'string' ? parseInt(indexRaw, 10) : Number(indexRaw)
+    const typeRaw = formData.get('type')
+    const type = typeof typeRaw === 'string' ? typeRaw : String(typeRaw)
+    
     if (!file) return NextResponse.json({ error: 'file is required' }, { status: 400 })
-    if (!Number.isInteger(index) || index < 0 || index > 2) {
-      return NextResponse.json({ error: 'index must be 0, 1, or 2' }, { status: 400 })
+    if (type !== 'how-it-works' && type !== 'socials') {
+      return NextResponse.json({ error: 'type must be "how-it-works" or "socials"' }, { status: 400 })
     }
 
     if (file.size > 15 * 1024 * 1024) {
@@ -31,21 +32,13 @@ export async function POST(req: NextRequest) {
 
     const buffer = Buffer.from(await file.arrayBuffer())
     const filename = `${Date.now()}-${crypto.randomBytes(8).toString('hex')}${ext}`
-    const dir = path.resolve(process.cwd(), 'var', 'advantages')
+    const dir = path.resolve(process.cwd(), 'var', 'images')
     fs.mkdirSync(dir, { recursive: true })
 
-    // Remove previous file for this index if present in settings
+    // Remove previous file if present in settings
     const current = (await getLandingSettings()) || ({} as LandingSettings)
-    const currentWhy = current.whyUseful || {
-      item1: { title: '', subtitle: '', image: null },
-      item2: { title: '', subtitle: '', image: null },
-      item3: { title: '', subtitle: '', image: null },
-    }
-    
-    const keys: Array<'item1' | 'item2' | 'item3'> = ['item1', 'item2', 'item3']
-    const key = keys[index]
-    const prevUrl = currentWhy[key]?.image || null
-    if (prevUrl && prevUrl.startsWith('/api/landing/advantages/')) {
+    const prevUrl = type === 'how-it-works' ? current.howItWorksImage : current.socialsImage
+    if (prevUrl && typeof prevUrl === 'string' && prevUrl.startsWith('/api/landing/images/')) {
       const prevName = prevUrl.split('/').pop()
       if (prevName) {
         const prevPath = path.join(dir, prevName)
@@ -57,47 +50,32 @@ export async function POST(req: NextRequest) {
     const filePath = path.join(dir, filename)
     fs.writeFileSync(filePath, buffer)
 
-    // Update settings (merge, keep others intact)
-    const updatedWhy: LandingSettings['whyUseful'] = {
-      item1: {
-        title: currentWhy.item1?.title || '',
-        subtitle: currentWhy.item1?.subtitle || '',
-        image: key === 'item1' ? `/api/landing/advantages/${filename}` : (currentWhy.item1?.image ?? null),
-      },
-      item2: {
-        title: currentWhy.item2?.title || '',
-        subtitle: currentWhy.item2?.subtitle || '',
-        image: key === 'item2' ? `/api/landing/advantages/${filename}` : (currentWhy.item2?.image ?? null),
-      },
-      item3: {
-        title: currentWhy.item3?.title || '',
-        subtitle: currentWhy.item3?.subtitle || '',
-        image: key === 'item3' ? `/api/landing/advantages/${filename}` : (currentWhy.item3?.image ?? null),
-      },
-    }
-
+    // Update settings
     const updated: LandingSettings = {
       header: current.header || { title: '', subtitle: '' },
       features: current.features || { items: ['', '', '', ''] },
       video: current.video || { file: null },
-      howItWorks: Array.isArray(current.howItWorks) ? current.howItWorks : [
+      howItWorks: current.howItWorks || [
         { title: '', subtitle: '' },
         { title: '', subtitle: '' },
         { title: '', subtitle: '' },
       ],
-      howItWorksImage: current.howItWorksImage ?? null,
-      socialsImage: current.socialsImage ?? null,
-      whyUseful: updatedWhy,
+      howItWorksImage: type === 'how-it-works' ? `/api/landing/images/${filename}` : (current.howItWorksImage ?? null),
+      socialsImage: type === 'socials' ? `/api/landing/images/${filename}` : (current.socialsImage ?? null),
+      whyUseful: current.whyUseful || {
+        item1: { title: '', subtitle: '', image: null },
+        item2: { title: '', subtitle: '', image: null },
+        item3: { title: '', subtitle: '', image: null },
+      },
       socials: current.socials || { telegram: '', vk: '' },
       faq: current.faq || { items: [] },
     }
 
     await saveLandingSettings(updated)
 
-    return NextResponse.json({ ok: true, url: `/api/landing/advantages/${filename}`, index })
+    return NextResponse.json({ ok: true, url: `/api/landing/images/${filename}`, type })
   } catch (e) {
     return NextResponse.json({ error: 'Upload failed' }, { status: 500 })
   }
 }
-
 

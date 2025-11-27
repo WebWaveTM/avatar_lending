@@ -153,7 +153,7 @@ export default async function HomePage() {
                             </div>
                             <div className="how-it-works-image-wrapper">
                                 <Image
-                                    src="/e4d435a6e5e35782fb9a86e609c04fe610e9d431.png"
+                                    src={settings?.howItWorksImage || "/e4d435a6e5e35782fb9a86e609c04fe610e9d431.png"}
                                     alt="Как это работает"
                                     width={600}
                                     height={800}
@@ -207,7 +207,7 @@ export default async function HomePage() {
                         <div className="how-it-works-flex">
                             <div className="how-it-works-image-wrapper">
                                 <Image
-                                    src="/e4d435a6e5e35782fb9a86e609c04fe610e9d431.png"
+                                    src={settings?.socialsImage || "/e4d435a6e5e35782fb9a86e609c04fe610e9d431.png"}
                                     alt="Наши соцсети"
                                     width={600}
                                     height={800}
