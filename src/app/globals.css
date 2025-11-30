@@ -1267,7 +1267,7 @@ button:focus-visible {
 
 .step {
   width: 100%;
-  max-width: 800px;
+  max-width: 550px;
   text-align: left;
   padding: 2rem;
   background: rgba(255, 255, 255, 0.3);
